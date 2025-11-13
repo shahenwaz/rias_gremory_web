@@ -1,4 +1,3 @@
-// src/components/layout/site-header.tsx
 import Link from "next/link";
 import {
   NavigationMenu,
