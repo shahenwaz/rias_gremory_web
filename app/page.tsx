@@ -1,6 +1,6 @@
-// src/app/page.tsx
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function HomePage() {
   return (
@@ -14,9 +14,17 @@ export default function HomePage() {
           your community fun, safe, and active 24/7.
         </p>
         <div className="flex flex-wrap gap-3">
-          <Button size="lg">Invite Bot</Button>
-          <Button size="lg" variant="outline">
-            View Commands
+          <Button asChild size="lg">
+            <Link
+              href="https://discord.com/api/oauth2/authorize?client_id=1012710312857849937&permissions=139589975104&scope=bot&utm_source=discordbotlist.com&utm_medium=bot_page"
+              target="_blank"
+            >
+              Invite Bot
+            </Link>
+          </Button>
+
+          <Button asChild size="lg" variant="outline">
+            <Link href="/commands">View Commands</Link>
           </Button>
         </div>
       </section>

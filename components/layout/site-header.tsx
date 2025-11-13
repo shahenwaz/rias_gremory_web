@@ -8,6 +8,7 @@ import {
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export function SiteHeader() {
   return (
@@ -86,6 +87,9 @@ export function SiteHeader() {
               </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
+
+          {/* Theme toggle */}
+          <ThemeToggle />
 
           {/* Invite Button */}
           <Button asChild size="sm" className="rounded-full">
