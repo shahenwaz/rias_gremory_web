@@ -120,3 +120,40 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .animate-float-slow {
+    animation: float-slow 12s ease-in-out infinite;
+  }
+
+  .animate-float-slow-delayed {
+    animation: float-slow 14s ease-in-out infinite;
+    animation-delay: 0.6s;
+  }
+
+  .animate-orbit {
+    animation: orbit 18s linear infinite;
+  }
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -12px, 0);
+  }
+}
+
+@keyframes orbit {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(6px, -6px, 0) rotate(6deg);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+}
