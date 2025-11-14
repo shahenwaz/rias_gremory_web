@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 
 export function HeroSection() {
   return (
-    <section className="relative overflow-hidden rounded-2xl border border-border/60 bg-linear-to-b from-background via-background to-secondary/40 px-4 py-10 sm:px-8 sm:py-12 lg:py-16">
+    <section className="relative overflow-hidden rounded-2xl border border-border/60 bg-linear-to-b from-background via-background to-secondary/40 px-4 py-6 sm:px-8 sm:py-8 lg:py-10">
       {/* subtle particles / glows */}
       <div className="pointer-events-none absolute inset-0">
         <div className="animate-float-slow absolute -top-12 -right-10 h-40 w-40 rounded-full bg-primary/25 blur-3xl" />
@@ -18,7 +18,7 @@ export function HeroSection() {
         {/* Left: copy + CTAs */}
         <div className="flex-1 space-y-5">
           <span className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-primary">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_10px_var(--color-primary)]" />
+            <span className="h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_14px_rgba(248,113,113,0.6)]" />
             Multipurpose Discord Bot
           </span>
 
@@ -48,10 +48,7 @@ export function HeroSection() {
               asChild
               size="lg"
               variant="secondary"
-              className="border border-border/80 bg-secondary
-                         text-sm font-medium text-foreground
-                         shadow-sm hover:bg-secondary/90
-                         transition-colors"
+              className="border border-border/80 bg-secondary text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-secondary/90"
             >
               <Link href="/commands">Browse commands</Link>
             </Button>
@@ -72,70 +69,35 @@ export function HeroSection() {
           </div>
         </div>
 
-        {/* Right: Rias card */}
+        {/* Right: Rias artwork + attached stat chips */}
         <div className="relative flex-1">
           <div className="animate-float-slow-delayed pointer-events-none absolute -top-6 -left-10 h-24 w-24 rounded-full bg-primary/20 blur-3xl" />
 
-          <div className="relative mx-auto max-w-xs rounded-3xl border border-primary/40 bg-secondary/40 p-px shadow-[0_0_40px_rgba(0,0,0,0.18)]">
-            <div className="relative overflow-hidden rounded-3xl bg-background/90">
-              {/* top glow */}
-              <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-linear-to-b from-primary/35 via-background/0 to-transparent" />
+          <div className="relative mx-auto w-full max-w-md">
+            {/* main hero image */}
+            <Image
+              src="/rias-gremory-hero.png"
+              alt="Rias Gremory artwork"
+              width={1536}
+              height={1024}
+              priority
+              className="h-auto w-full rounded-3xl object-cover"
+            />
 
-              <div className="relative px-4 pt-4 pb-4">
-                <div className="flex items-center justify-between gap-3">
-                  <div>
-                    <p className="text-xs font-semibold tracking-wide">
-                      Rias Gremory
-                    </p>
-                    <p className="text-[11px] text-muted-foreground">
-                      Ultra Legendary Support
-                    </p>
-                  </div>
-                  <span className="rounded-full bg-primary/10 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-primary">
-                    v5.0
-                  </span>
-                </div>
-
-                <div className="mt-4 flex justify-center">
-                  <div className="relative h-40 w-40 overflow-hidden rounded-2xl border border-border/60 bg-secondary/40">
-                    {/* Drop your actual Rias artwork in /public/rias-gremory-hero.png */}
-                    <Image
-                      src="/rias-gremory-hero.png"
-                      alt="Rias Gremory artwork"
-                      fill
-                      className="object-cover"
-                      sizes="160px"
-                    />
-                  </div>
-                </div>
-
-                <div className="mt-4 grid grid-cols-3 gap-2 text-[11px]">
-                  <div className="rounded-xl bg-secondary/60 px-2 py-1.5">
-                    <p className="text-[10px] text-muted-foreground">Music</p>
-                    <p className="text-xs font-semibold">24/7</p>
-                  </div>
-                  <div className="rounded-xl bg-secondary/60 px-2 py-1.5">
-                    <p className="text-[10px] text-muted-foreground">Gacha</p>
-                    <p className="text-xs font-semibold">Anime</p>
-                  </div>
-                  <div className="rounded-xl bg-secondary/60 px-2 py-1.5">
-                    <p className="text-[10px] text-muted-foreground">
-                      Moderation
-                    </p>
-                    <p className="text-xs font-semibold">Smart</p>
-                  </div>
-                </div>
+            {/* stat chips, gently overlapping the bottom of the image */}
+            <div className="grid grid-cols-3 gap-2 text-[11px] -mt-4 sm:-mt-5">
+              <div className="rounded-xl border border-border/80 bg-background/90 px-3 py-2 shadow-sm backdrop-blur-sm">
+                <p className="text-[10px] text-muted-foreground">Music</p>
+                <p className="text-xs font-semibold text-foreground">24/7</p>
               </div>
-            </div>
-          </div>
-
-          {/* small glow badge bottom-right */}
-          <div className="mt-4 flex justify-center lg:justify-end">
-            <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-background/80 px-3 py-1 text-[11px] text-muted-foreground shadow-sm">
-              <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-              <span>
-                Optimized for anime communities &amp; multiplayer servers
-              </span>
+              <div className="rounded-xl border border-border/80 bg-background/90 px-3 py-2 shadow-sm backdrop-blur-sm">
+                <p className="text-[10px] text-muted-foreground">Gacha</p>
+                <p className="text-xs font-semibold text-foreground">Anime</p>
+              </div>
+              <div className="rounded-xl border border-border/80 bg-background/90 px-3 py-2 shadow-sm backdrop-blur-sm">
+                <p className="text-[10px] text-muted-foreground">Moderation</p>
+                <p className="text-xs font-semibold text-foreground">Smart</p>
+              </div>
             </div>
           </div>
         </div>
