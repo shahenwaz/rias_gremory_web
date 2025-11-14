@@ -14,6 +14,7 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from "@/components/ui/accordion";
+import { Copy, Check } from "lucide-react";
 
 export default function CommandsPage() {
   const [search, setSearch] = React.useState("");
@@ -171,9 +172,12 @@ export default function CommandsPage() {
                   <AccordionContent className="px-3 pb-4 pt-1 text-sm">
                     <div className="space-y-3 rounded-xl border border-border/40 bg-background/60 p-3">
                       <div className="space-y-1">
-                        <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
-                          Usage
-                        </p>
+                        <div className="flex items-center justify-between gap-2">
+                          <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+                            Usage
+                          </p>
+                          <CopyUsageButton usage={cmd.usage} />
+                        </div>
                         <code className="inline-block rounded-md bg-muted/60 px-2 py-1 text-xs">
                           {cmd.usage}
                         </code>
@@ -257,9 +261,45 @@ function CategoryPill({
       type="button"
       onClick={onClick}
       data-active={active ? "true" : "false"}
-      className="whitespace-nowrap rounded-full border border-transparent bg-muted/40 px-3 py-1 text-xs font-medium text-muted-foreground transition hover:bg-muted/70 data-[active=true]:border-primary/60 data-[active=true]:bg-primary data-[active=true]:text-primary-foreground"
+      className="whitespace-nowrap rounded-full border border-transparent bg-muted/40 px-3 py-1 text-xs font-medium text-muted-foreground transition hover:bg-muted/70 data-[active=true]:border-primary/60 data-[active=true]:bg-primary data-[active=true]:text-primary-foreground cursor-pointer"
     >
       {label}
+    </button>
+  );
+}
+
+function CopyUsageButton({ usage }: { usage: string }) {
+  const [copied, setCopied] = React.useState(false);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(usage);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1500);
+    } catch (err) {
+      // fail silently, maybe log if needed
+      console.error("Failed to copy usage", err);
+    }
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={handleCopy}
+      className="inline-flex items-center gap-1 rounded-full border border-border/60 bg-muted/40 px-2 py-1 text-[10px] font-medium text-muted-foreground transition hover:bg-muted/70 hover:text-foreground cursor-pointer"
+      aria-label="Copy usage"
+    >
+      {copied ? (
+        <>
+          <Check className="h-3 w-3" />
+          <span>Copied</span>
+        </>
+      ) : (
+        <>
+          <Copy className="h-3 w-3" />
+          <span>Copy</span>
+        </>
+      )}
     </button>
   );
 }
