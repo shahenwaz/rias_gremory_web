@@ -99,7 +99,7 @@ export function SiteHeader() {
 
             {/* Invite Button */}
             <Button asChild size="sm" className="rounded-full">
-              <Link href="https://discord.com/oauth2/authorize?client_id=YOUR_BOT_ID&scope=bot%20applications.commands&permissions=8">
+              <Link href="https://discord.com/oauth2/authorize?client_id=1012710312857849937&permissions=139589975104&scope=bot">
                 Invite Bot
               </Link>
             </Button>

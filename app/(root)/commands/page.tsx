@@ -338,11 +338,11 @@ function CommandCategoryBadge({
   return (
     <Badge
       variant="outline"
-      className="inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-[radial-gradient(circle_at_top,rgba(248,113,113,0.16),rgba(10,10,12,0.98))] px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-zinc-100 shadow-[0_10px_30px_rgba(0,0,0,0.85)]"
+      className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-[radial-gradient(circle_at_top,rgba(248,113,113,0.12),rgba(10,10,12,0.96))] px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-[0.14em] text-zinc-100/90 shadow-sm shadow-black/30"
     >
       {Icon && (
         <Icon
-          className="h-3.5 w-3.5 shrink-0 text-rose-200 drop-shadow-[0_0_6px_rgba(248,113,113,0.85)]"
+          className="h-3.5 w-3.5 shrink-0 text-rose-200/90 drop-shadow-[0_0_2px_rgba(248,113,113,0.35)]"
           aria-hidden="true"
         />
       )}
