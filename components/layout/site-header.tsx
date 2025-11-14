@@ -10,7 +10,6 @@ import {
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
 import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { Menu, X } from "lucide-react";
 
 export function SiteHeader() {
@@ -98,9 +97,6 @@ export function SiteHeader() {
               </NavigationMenuList>
             </NavigationMenu>
 
-            {/* Theme toggle */}
-            <ThemeToggle />
-
             {/* Invite Button */}
             <Button asChild size="sm" className="rounded-full">
               <Link href="https://discord.com/oauth2/authorize?client_id=YOUR_BOT_ID&scope=bot%20applications.commands&permissions=8">
@@ -111,8 +107,6 @@ export function SiteHeader() {
 
           {/* Mobile actions */}
           <div className="flex items-center gap-2 md:hidden">
-            <ThemeToggle />
-
             <Button
               asChild
               size="sm"

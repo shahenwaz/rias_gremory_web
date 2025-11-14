@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 
@@ -16,19 +15,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className="dark" suppressHydrationWarning>
       <body className="min-h-screen bg-background text-foreground antialiased">
-        <ThemeProvider>
-          <div className="flex min-h-screen flex-col">
-            <SiteHeader />
-            <main className="flex-1">
-              <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-8">
-                {children}
-              </div>
-            </main>
-            <SiteFooter />
-          </div>
-        </ThemeProvider>
+        <div className="flex min-h-screen flex-col">
+          <SiteHeader />
+          <main className="flex-1">
+            <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-8">
+              {children}
+            </div>
+          </main>
+          <SiteFooter />
+        </div>
       </body>
     </html>
   );
