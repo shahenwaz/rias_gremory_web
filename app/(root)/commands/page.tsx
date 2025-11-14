@@ -14,7 +14,31 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from "@/components/ui/accordion";
-import { Copy, Check } from "lucide-react";
+import {
+  Copy,
+  Check,
+  Filter,
+  Music2,
+  ListMusic,
+  Gamepad2,
+  Settings2,
+  SmilePlus,
+  Info,
+  ShieldCheck,
+  Grid3X3,
+  type LucideIcon,
+} from "lucide-react";
+
+const CATEGORY_ICON_MAP: Record<CommandCategoryId, LucideIcon> = {
+  filters: Filter,
+  music: Music2,
+  playlist: ListMusic,
+  animegame: Gamepad2,
+  config: Settings2,
+  fun: SmilePlus,
+  info: Info,
+  mod: ShieldCheck,
+};
 
 export default function CommandsPage() {
   const [search, setSearch] = React.useState("");
@@ -112,9 +136,10 @@ export default function CommandsPage() {
             </div>
           </div>
 
-          <div className="mt-3 flex gap-2 overflow-x-auto pb-1 pt-1 text-xs">
+          <div className="mt-3 flex flex-wrap gap-2 pt-1 text-xs">
             <CategoryPill
               label="All"
+              icon={Grid3X3}
               active={activeCategory === "all"}
               onClick={() => setActiveCategory("all")}
             />
@@ -122,6 +147,7 @@ export default function CommandsPage() {
               <CategoryPill
                 key={cat.id}
                 label={cat.label}
+                icon={CATEGORY_ICON_MAP[cat.id]}
                 active={activeCategory === cat.id}
                 onClick={() => setActiveCategory(cat.id)}
               />
@@ -151,24 +177,19 @@ export default function CommandsPage() {
                     <div className="flex flex-1 items-center gap-3">
                       <div className="flex flex-col gap-1">
                         <div className="flex items-center gap-2">
-                          <span className="font-mono text-xs uppercase tracking-wide text-primary">
+                          <span className="font-mono text-base lg:text-lg font-bold uppercase tracking-[0.18em] text-primary">
                             /{cmd.name}
                           </span>
-                          <Badge
-                            variant="outline"
-                            className="border-border/50 bg-muted/50 px-2 py-0 text-[10px] uppercase tracking-wide"
-                          >
-                            {COMMAND_CATEGORIES.find(
-                              (c) => c.id === cmd.category
-                            )?.label ?? cmd.category}
-                          </Badge>
+                          <CommandCategoryBadge categoryId={cmd.category} />
                         </div>
+
                         <p className="line-clamp-1 text-xs text-muted-foreground sm:text-sm">
                           {cmd.description}
                         </p>
                       </div>
                     </div>
                   </AccordionTrigger>
+
                   <AccordionContent className="px-3 pb-4 pt-1 text-sm">
                     <div className="space-y-3 rounded-xl border border-border/40 bg-background/60 p-3">
                       <div className="space-y-1">
@@ -249,10 +270,12 @@ function StatChip({
 
 function CategoryPill({
   label,
+  icon: Icon,
   active,
   onClick,
 }: {
   label: string;
+  icon?: LucideIcon;
   active: boolean;
   onClick: () => void;
 }) {
@@ -261,9 +284,10 @@ function CategoryPill({
       type="button"
       onClick={onClick}
       data-active={active ? "true" : "false"}
-      className="whitespace-nowrap rounded-full border border-transparent bg-muted/40 px-3 py-1 text-xs font-medium text-muted-foreground transition hover:bg-muted/70 data-[active=true]:border-primary/60 data-[active=true]:bg-primary data-[active=true]:text-primary-foreground cursor-pointer"
+      className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-transparent bg-muted/40 px-3 py-1 text-xs font-medium text-muted-foreground transition hover:bg-muted/70 data-[active=true]:border-primary/60 data-[active=true]:bg-primary data-[active=true]:text-primary-foreground cursor-pointer"
     >
-      {label}
+      {Icon && <Icon className="h-3.5 w-3.5" />}
+      <span>{label}</span>
     </button>
   );
 }
@@ -277,7 +301,6 @@ function CopyUsageButton({ usage }: { usage: string }) {
       setCopied(true);
       window.setTimeout(() => setCopied(false), 1500);
     } catch (err) {
-      // fail silently, maybe log if needed
       console.error("Failed to copy usage", err);
     }
   };
@@ -301,5 +324,31 @@ function CopyUsageButton({ usage }: { usage: string }) {
         </>
       )}
     </button>
+  );
+}
+
+function CommandCategoryBadge({
+  categoryId,
+}: {
+  categoryId: CommandCategoryId;
+}) {
+  const categoryMeta = COMMAND_CATEGORIES.find((c) => c.id === categoryId);
+  const Icon = CATEGORY_ICON_MAP[categoryId];
+
+  return (
+    <Badge
+      variant="outline"
+      className="inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-[radial-gradient(circle_at_top,rgba(248,113,113,0.16),rgba(10,10,12,0.98))] px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-zinc-100 shadow-[0_10px_30px_rgba(0,0,0,0.85)]"
+    >
+      {Icon && (
+        <Icon
+          className="h-3.5 w-3.5 shrink-0 text-rose-200 drop-shadow-[0_0_6px_rgba(248,113,113,0.85)]"
+          aria-hidden="true"
+        />
+      )}
+      <span className="relative top-[0.2px]">
+        {categoryMeta?.label ?? categoryId}
+      </span>
+    </Badge>
   );
 }
