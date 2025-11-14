@@ -17,7 +17,7 @@ export function HeroSection() {
       <div className="relative flex flex-col items-start gap-10 lg:flex-row lg:items-center">
         {/* Left: copy + CTAs */}
         <div className="flex-1 space-y-5">
-          <span className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-primary">
+          <span className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-chart-1">
             <span className="h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_14px_rgba(248,113,113,0.6)]" />
             Multipurpose Discord Bot
           </span>
