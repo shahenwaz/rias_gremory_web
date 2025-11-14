@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -14,6 +15,7 @@ import { Menu, X } from "lucide-react";
 
 export function SiteHeader() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const pathname = usePathname();
 
   const toggleMobile = () => setMobileOpen((prev) => !prev);
   const closeMobile = () => setMobileOpen(false);
@@ -182,29 +184,47 @@ export function SiteHeader() {
             <Link
               href="/"
               onClick={closeMobile}
-              className="block rounded-lg px-3 py-2 text-sm font-medium text-foreground
-                         bg-primary/5 hover:bg-primary/15"
+              className={`block rounded-lg px-3 py-2 text-sm transition-colors ${
+                pathname === "/"
+                  ? "font-medium text-foreground bg-primary/15"
+                  : "text-muted-foreground hover:bg-primary/10 hover:text-foreground"
+              }`}
             >
               Home
             </Link>
+
             <Link
               href="/commands"
               onClick={closeMobile}
-              className="block rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-primary/10 hover:text-foreground"
+              className={`block rounded-lg px-3 py-2 text-sm transition-colors ${
+                pathname.startsWith("/commands")
+                  ? "font-medium text-foreground bg-primary/15"
+                  : "text-muted-foreground hover:bg-primary/10 hover:text-foreground"
+              }`}
             >
               Commands
             </Link>
+
             <Link
               href="/features"
               onClick={closeMobile}
-              className="block rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-primary/10 hover:text-foreground"
+              className={`block rounded-lg px-3 py-2 text-sm transition-colors ${
+                pathname.startsWith("/features")
+                  ? "font-medium text-foreground bg-primary/15"
+                  : "text-muted-foreground hover:bg-primary/10 hover:text-foreground"
+              }`}
             >
               Features
             </Link>
+
             <Link
               href="/support"
               onClick={closeMobile}
-              className="block rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-primary/10 hover:text-foreground"
+              className={`block rounded-lg px-3 py-2 text-sm transition-colors ${
+                pathname.startsWith("/support")
+                  ? "font-medium text-foreground bg-primary/15"
+                  : "text-muted-foreground hover:bg-primary/10 hover:text-foreground"
+              }`}
             >
               Support
             </Link>
