@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { DocsSidebar } from "@/components/docs/docs-sidebar";
+import { DocsPager } from "@/components/docs/docs-pager";
 
 export default function DocsLayout({ children }: { children: ReactNode }) {
   return (
@@ -18,6 +19,9 @@ export default function DocsLayout({ children }: { children: ReactNode }) {
         >
           <div className="relative z-10 mx-auto max-w-3xl px-4 py-5 sm:px-6 sm:py-6 lg:px-8 lg:py-7">
             {children}
+
+            {/* Mobile-only previous/next navigation */}
+            <DocsPager />
           </div>
         </section>
       </div>
