@@ -73,7 +73,7 @@ export default function DocsHomePage() {
             the configured prefix.
           </p>
 
-          <ul className="mt-2 space-y-2 rounded-xl border border-border/60 bg-card/60 p-3 text-xs sm:text-sm">
+          <ul className="mt-2 space-y-2 rounded-xl border border-border/60 bg-background p-3 text-xs sm:text-sm">
             <li>
               <span className="font-mono text-primary">/help</span> – show the
               help menu and all categories.
@@ -110,7 +110,7 @@ export default function DocsHomePage() {
           </p>
 
           <div className="grid gap-3 sm:grid-cols-2">
-            <div className="space-y-2 rounded-xl border border-border/60 bg-secondary/30 p-3">
+            <div className="space-y-2 rounded-xl border border-border/60 bg-background p-3">
               <h4 className="text-sm font-semibold">Music</h4>
               <ul className="space-y-1 text-xs sm:text-[13px]">
                 <li>
@@ -130,7 +130,7 @@ export default function DocsHomePage() {
               </ul>
             </div>
 
-            <div className="space-y-2 rounded-xl border border-border/60 bg-secondary/30 p-3">
+            <div className="space-y-2 rounded-xl border border-border/60 bg-background p-3">
               <h4 className="text-sm font-semibold">Anime Game</h4>
               <ul className="space-y-1 text-xs sm:text-[13px]">
                 <li>
