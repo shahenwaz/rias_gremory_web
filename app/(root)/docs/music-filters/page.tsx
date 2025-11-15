@@ -60,7 +60,7 @@ export default function MusicFiltersDocsPage() {
             Core music commands from the help menu:
           </p>
 
-          <ul className="grid gap-2 rounded-xl border border-border/60 bg-background p-3 text-xs sm:grid-cols-2 sm:text-[13px]">
+          <ul className="mt-2 space-y-2 rounded-xl border border-border/60 bg-background p-3 text-xs sm:text-sm">
             <li>
               <span className="font-mono text-primary">play</span> – play a song
               or playlist.
@@ -98,7 +98,7 @@ export default function MusicFiltersDocsPage() {
             Manage the music queue precisely:
           </p>
 
-          <ul className="space-y-1.5 text-xs sm:text-[13px]">
+          <ul className="mt-2 space-y-2 rounded-xl border border-border/60 bg-background p-3 text-xs sm:text-sm">
             <li>
               <span className="font-mono text-primary">queue</span> – show the
               queue.
