@@ -18,7 +18,7 @@ const typeStyles: Record<CalloutType, string> = {
 };
 
 const pillStyles: Record<CalloutType, string> = {
-  tip: "bg-primary/15 text-primary-foreground/80",
+  tip: "bg-primary/20 text-primary-foreground/80",
   warning: "bg-destructive/15 text-destructive",
 };
 
