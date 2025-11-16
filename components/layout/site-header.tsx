@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export function SiteHeader() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -19,6 +20,35 @@ export function SiteHeader() {
 
   const toggleMobile = () => setMobileOpen((prev) => !prev);
   const closeMobile = () => setMobileOpen(false);
+
+  // Desktop nav items + matching logic
+  const navItems = [
+    {
+      label: "Home",
+      href: "/",
+      isActive: pathname === "/",
+    },
+    {
+      label: "Commands",
+      href: "/commands",
+      isActive: pathname.startsWith("/commands"),
+    },
+    {
+      label: "Docs",
+      href: "/docs",
+      isActive: pathname.startsWith("/docs"),
+    },
+    {
+      label: "Features",
+      href: "/features",
+      isActive: pathname.startsWith("/features"),
+    },
+    {
+      label: "Support",
+      href: "/support",
+      isActive: pathname.startsWith("/support"),
+    },
+  ];
 
   return (
     <>
@@ -52,50 +82,25 @@ export function SiteHeader() {
           {/* Desktop nav */}
           <div className="hidden items-center gap-4 md:flex">
             <NavigationMenu>
-              <NavigationMenuList className="gap-2">
-                <NavigationMenuItem>
-                  <NavigationMenuLink asChild>
-                    <Link
-                      href="/"
-                      className="px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground"
-                    >
-                      Home
-                    </Link>
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-
-                <NavigationMenuItem>
-                  <NavigationMenuLink asChild>
-                    <Link
-                      href="/commands"
-                      className="px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground"
-                    >
-                      Commands
-                    </Link>
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-
-                <NavigationMenuItem>
-                  <NavigationMenuLink asChild>
-                    <Link
-                      href="/features"
-                      className="px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground"
-                    >
-                      Features
-                    </Link>
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-
-                <NavigationMenuItem>
-                  <NavigationMenuLink asChild>
-                    <Link
-                      href="/support"
-                      className="px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground"
-                    >
-                      Support
-                    </Link>
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
+              <NavigationMenuList className="gap-1.5">
+                {navItems.map((item) => (
+                  <NavigationMenuItem key={item.href}>
+                    <NavigationMenuLink asChild>
+                      <Link
+                        href={item.href}
+                        className={cn(
+                          "relative rounded-full px-3 py-1.5 text-sm transition-colors",
+                          "hover:text-foreground hover:bg-card/70",
+                          item.isActive
+                            ? "bg-card text-foreground shadow-[0_0_0_1px_rgba(255,255,255,0.04)]"
+                            : "text-muted-foreground"
+                        )}
+                      >
+                        {item.label}
+                      </Link>
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
+                ))}
               </NavigationMenuList>
             </NavigationMenu>
 
@@ -137,7 +142,6 @@ export function SiteHeader() {
         </div>
       </header>
 
-      {/* Mobile floating drawer */}
       <div
         className={`fixed inset-0 z-40 flex items-start justify-end md:hidden ${
           mobileOpen ? "pointer-events-auto" : "pointer-events-none"
@@ -203,6 +207,18 @@ export function SiteHeader() {
               }`}
             >
               Commands
+            </Link>
+
+            <Link
+              href="/docs"
+              onClick={closeMobile}
+              className={`block rounded-lg px-3 py-2 text-sm transition-colors ${
+                pathname.startsWith("/docs")
+                  ? "font-medium text-foreground bg-primary/15"
+                  : "text-muted-foreground hover:bg-primary/10 hover:text-foreground"
+              }`}
+            >
+              Docs
             </Link>
 
             <Link

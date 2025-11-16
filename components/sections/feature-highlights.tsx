@@ -15,7 +15,7 @@ export function FeatureHighlights() {
         </CardContent>
       </Card>
 
-      <Card className="border border-border/90 bg-secondary/80 shadow-sm transition-colors hover:bg-secondary">
+      <Card className="border border-border/90 bg-card shadow-sm transition-colors hover:bg-secondary">
         <CardHeader>
           <CardTitle className="text-base text-foreground">
             Anime Game

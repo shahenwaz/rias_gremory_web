@@ -87,7 +87,7 @@ export default function CommandsPage() {
     <main className="min-h-screen bg-background">
       <section className="mx-auto flex max-w-6xl flex-col gap-4">
         {/* Header */}
-        <div className="relative overflow-hidden rounded-2xl border border-border/60 bg-card/65 p-6 sm:p-8">
+        <div className="relative overflow-hidden rounded-2xl border border-border/60 bg-card p-6 sm:p-8">
           <div className="relative space-y-4">
             <div className="inline-flex items-center gap-2 rounded-full bg-muted/60 px-3 py-1 text-xs font-medium text-muted-foreground">
               <span className="h-1.5 w-1.5 rounded-full bg-primary" />
@@ -117,7 +117,7 @@ export default function CommandsPage() {
         </div>
 
         {/* Filters bar */}
-        <div className="rounded-2xl border border-border/60 bg-card/65 p-4 shadow-[0_0_0_1px_rgba(255,255,255,0.02)] backdrop-blur">
+        <div className="rounded-2xl border border-border/60 bg-card p-4 shadow-[0_0_0_1px_rgba(255,255,255,0.02)] backdrop-blur">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="w-full sm:max-w-sm">
               <Input
@@ -156,7 +156,7 @@ export default function CommandsPage() {
         </div>
 
         {/* Commands list */}
-        <div className="rounded-2xl border border-border/60 bg-card/65 p-3 sm:p-4">
+        <div className="rounded-2xl border border-border/60 bg-card p-3 sm:p-4">
           {filteredCommands.length === 0 ? (
             <div className="flex flex-col items-center gap-2 py-12 text-center text-sm text-muted-foreground">
               <p className="font-medium">No commands found.</p>
@@ -173,7 +173,7 @@ export default function CommandsPage() {
                   value={cmd.category + ":" + cmd.name}
                   className="border-border/40"
                 >
-                  <AccordionTrigger className="px-3 text-left hover:no-underline">
+                  <AccordionTrigger className="px-3 text-left hover:no-underline hover:bg-muted/80">
                     <div className="flex flex-1 items-center gap-3">
                       <div className="flex flex-col gap-1">
                         <div className="flex items-center gap-2">
@@ -191,7 +191,7 @@ export default function CommandsPage() {
                   </AccordionTrigger>
 
                   <AccordionContent className="px-3 pb-4 pt-1 text-sm">
-                    <div className="space-y-3 rounded-xl border border-border/40 bg-background/60 p-3">
+                    <div className="space-y-3 rounded-xl border border-border/40 bg-background p-3">
                       <div className="space-y-1">
                         <div className="flex items-center justify-between gap-2">
                           <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
