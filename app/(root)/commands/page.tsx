@@ -173,7 +173,7 @@ export default function CommandsPage() {
                   value={cmd.category + ":" + cmd.name}
                   className="border-border/40"
                 >
-                  <AccordionTrigger className="px-3 text-left hover:no-underline hover:bg-muted/80">
+                  <AccordionTrigger className="px-3 text-left hover:no-underline">
                     <div className="flex flex-1 items-center gap-3">
                       <div className="flex flex-col gap-1">
                         <div className="flex items-center gap-2">

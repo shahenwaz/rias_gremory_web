@@ -15,7 +15,7 @@ export function SupportHero() {
         <div className="animate-orbit absolute -right-10 -bottom-10 h-40 w-40 rounded-full bg-secondary/20 blur-3xl" />
       </div>
 
-      <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="relative flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
         <div className="space-y-3">
           <div className="inline-flex items-center gap-2 rounded-full border border-border/80 bg-background/60 px-3 py-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">
             <LifeBuoy className="h-3.5 w-3.5" />

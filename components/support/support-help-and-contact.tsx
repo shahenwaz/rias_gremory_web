@@ -27,29 +27,29 @@ export function SupportHelpAndContact() {
       title: "Music not playing",
       description: "Bot joined voice but no sound? Start with these checks.",
       // Docs slug: troubleshooting > music
-      href: "/docs/troubleshooting/music-not-playing",
+      href: "/docs/music-filters",
       icon: Headphones,
     },
     {
       title: "Commands not responding",
       description: "Bot online but ignoring you? Fix common command issues.",
       // Docs slug: troubleshooting > commands
-      href: "/docs/troubleshooting/commands-not-responding",
+      href: "/docs",
       icon: AlertTriangle,
     },
     {
       title: "Prefix & slash confusion",
       description: "Not sure if it's prefix or slash commands? Clarify here.",
       // Docs slug: getting-started > command styles
-      href: "/docs/getting-started/command-styles",
+      href: "/docs",
       icon: MessageCircle,
     },
   ];
 
   return (
-    <section className="grid gap-6 lg:grid-cols-[minmax(0,2fr),minmax(0,1.25fr)]">
+    <section className="grid gap-5 lg:grid-cols-[minmax(0,2fr),minmax(0,1.25fr)]">
       {/* Quick help tiles – light, non-duplicate of full docs */}
-      <Card className="border-border/70 bg-background/80">
+      <Card className="border-border/70 bg-card">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
             <MessageCircle className="h-5 w-5 text-primary" />
@@ -72,7 +72,7 @@ export function SupportHelpAndContact() {
             <Link
               key={item.title}
               href={item.href}
-              className="group rounded-xl border border-border/70 bg-muted/40 p-3 text-sm transition hover:border-primary/60 hover:bg-primary/5"
+              className="group rounded-xl border border-border/70 bg-background p-3 text-sm transition hover:border-primary/60 hover:bg-primary/5"
             >
               <div className="flex items-start gap-2.5">
                 <div className="mt-0.5 flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
@@ -99,7 +99,7 @@ export function SupportHelpAndContact() {
       </Card>
 
       {/* Contact / DM staff info */}
-      <Card className="border-border/70 bg-background/80">
+      <Card className="border-border/70 bg-card">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
             <LifeBuoy className="h-5 w-5 text-primary" />
@@ -151,7 +151,7 @@ export function SupportHelpAndContact() {
           </div>
 
           {/* Placeholder for future ticket / email system */}
-          <div className="rounded-xl border border-dashed border-border/80 bg-muted/40 p-3 text-xs text-muted-foreground">
+          <div className="rounded-xl border border-dashed border-border/80 bg-background p-3 text-xs text-muted-foreground">
             <span className="font-medium text-foreground">
               Coming soon:&nbsp;
             </span>
