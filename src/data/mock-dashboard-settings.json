@@ -1,0 +1,154 @@
+[
+  {
+    "guildId": "guild_nrz_esports",
+    "controlPanelLogs": {
+      "enabled": true,
+      "channelName": "#control-panel",
+      "lastAction": "Welcome module updated",
+      "lastUpdated": "2 minutes ago"
+    },
+    "modules": [
+      {
+        "id": "utility",
+        "label": "Utility",
+        "group": "utility",
+        "description": "Quick server tools, command helpers, and basic bot controls.",
+        "enabled": true,
+        "status": "ready",
+        "channelName": "#bot-commands",
+        "statsLabel": "12 commands"
+      },
+      {
+        "id": "welcome-goodbye",
+        "label": "Welcome & Goodbye",
+        "group": "utility",
+        "description": "Send custom welcome and goodbye messages when members join or leave.",
+        "enabled": true,
+        "status": "ready",
+        "channelName": "#welcome",
+        "statsLabel": "2 templates"
+      },
+      {
+        "id": "auto-roles",
+        "label": "Auto Roles",
+        "group": "utility",
+        "description": "Automatically assign selected roles when a new member joins.",
+        "enabled": false,
+        "status": "needs-api",
+        "channelName": "No channel required",
+        "statsLabel": "0 roles"
+      },
+      {
+        "id": "self-roles",
+        "label": "Self-Assignable Roles",
+        "group": "utility",
+        "description": "Let members pick approved roles from a clean dashboard-controlled setup.",
+        "enabled": true,
+        "status": "needs-api",
+        "channelName": "#roles",
+        "statsLabel": "5 roles"
+      },
+      {
+        "id": "statistics",
+        "label": "Statistics",
+        "group": "utility",
+        "description": "Server growth, activity, and member analytics. Planned for later.",
+        "enabled": false,
+        "status": "later",
+        "channelName": "Coming later",
+        "statsLabel": "Later"
+      },
+      {
+        "id": "moderation",
+        "label": "Moderation",
+        "group": "moderation",
+        "description": "Dashboard controls for moderation rules and actions. Planned for later.",
+        "enabled": false,
+        "status": "later",
+        "channelName": "Coming later",
+        "statsLabel": "Later"
+      },
+      {
+        "id": "logs",
+        "label": "Logs",
+        "group": "moderation",
+        "description": "Track server events like deleted messages, joins, leaves, and role changes.",
+        "enabled": true,
+        "status": "ready",
+        "channelName": "#mod-logs",
+        "statsLabel": "8 events"
+      },
+      {
+        "id": "automod",
+        "label": "Automod",
+        "group": "moderation",
+        "description": "Automatic filtering and moderation rules. Planned for later.",
+        "enabled": false,
+        "status": "later",
+        "channelName": "Coming later",
+        "statsLabel": "Later"
+      },
+      {
+        "id": "control-panel-logs",
+        "label": "Control Panel Logs",
+        "group": "others",
+        "description": "Record dashboard changes made by admins for transparency.",
+        "enabled": true,
+        "status": "ready",
+        "channelName": "#control-panel",
+        "statsLabel": "Active"
+      },
+      {
+        "id": "mod-actions",
+        "label": "Mod Actions",
+        "group": "others",
+        "description": "Review moderation actions triggered by staff or bot commands.",
+        "enabled": false,
+        "status": "needs-api",
+        "channelName": "#mod-actions",
+        "statsLabel": "API needed"
+      }
+    ]
+  },
+  {
+    "guildId": "guild_rias_lab",
+    "controlPanelLogs": {
+      "enabled": false,
+      "channelName": "#dashboard-logs",
+      "lastAction": "No recent changes",
+      "lastUpdated": "Today"
+    },
+    "modules": [
+      {
+        "id": "utility",
+        "label": "Utility",
+        "group": "utility",
+        "description": "Quick server tools, command helpers, and basic bot controls.",
+        "enabled": true,
+        "status": "ready",
+        "channelName": "#bot",
+        "statsLabel": "12 commands"
+      },
+      {
+        "id": "welcome-goodbye",
+        "label": "Welcome & Goodbye",
+        "group": "utility",
+        "description": "Send custom welcome and goodbye messages when members join or leave.",
+        "enabled": false,
+        "status": "ready",
+        "channelName": "#welcome",
+        "statsLabel": "Not configured"
+      },
+      {
+        "id": "logs",
+        "label": "Logs",
+        "group": "moderation",
+        "description": "Track server events like deleted messages, joins, leaves, and role changes.",
+        "enabled": true,
+        "status": "ready",
+        "channelName": "#logs",
+        "statsLabel": "5 events"
+      }
+    ]
+  }
+]

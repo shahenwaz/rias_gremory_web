@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { SiteHeader } from "@/components/layout/site-header";
-import { SiteFooter } from "@/components/layout/site-footer";
+import { RootShell } from "@/components/layout/root-shell";
 
 export const metadata: Metadata = {
   title: "Rias Gremory Discord Bot",
@@ -17,15 +16,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <body className="min-h-screen bg-background text-foreground antialiased">
-        <div className="flex min-h-screen flex-col">
-          <SiteHeader />
-          <main className="flex-1">
-            <div className="mx-auto max-w-6xl px-4 py-5 sm:px-6 sm:py-8">
-              {children}
-            </div>
-          </main>
-          <SiteFooter />
-        </div>
+        <RootShell>{children}</RootShell>
       </body>
     </html>
   );

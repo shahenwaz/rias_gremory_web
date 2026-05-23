@@ -1,0 +1,29 @@
+[
+  {
+    "id": "guild_nrz_esports",
+    "name": "NRZ Esports",
+    "icon": "NR",
+    "memberCount": 4820,
+    "role": "Owner",
+    "botInstalled": true,
+    "permissions": ["ADMINISTRATOR", "MANAGE_GUILD"]
+  },
+  {
+    "id": "guild_rias_lab",
+    "name": "Rias Lab",
+    "icon": "RL",
+    "memberCount": 1240,
+    "role": "Administrator",
+    "botInstalled": true,
+    "permissions": ["ADMINISTRATOR", "MANAGE_GUILD"]
+  },
+  {
+    "id": "guild_anime_arena",
+    "name": "Anime Arena",
+    "icon": "AA",
+    "memberCount": 891,
+    "role": "Manager",
+    "botInstalled": false,
+    "permissions": ["MANAGE_GUILD"]
+  }
+]

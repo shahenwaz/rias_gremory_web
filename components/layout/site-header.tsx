@@ -48,6 +48,11 @@ export function SiteHeader() {
       href: "/support",
       isActive: pathname.startsWith("/support"),
     },
+    {
+      label: "Dashboard",
+      href: "/dashboard",
+      isActive: pathname.startsWith("/dashboard"),
+    },
   ];
 
   return (
@@ -93,7 +98,7 @@ export function SiteHeader() {
                           "hover:text-foreground hover:bg-card/70",
                           item.isActive
                             ? "bg-card text-foreground shadow-[0_0_0_1px_rgba(255,255,255,0.04)]"
-                            : "text-muted-foreground"
+                            : "text-muted-foreground",
                         )}
                       >
                         {item.label}
