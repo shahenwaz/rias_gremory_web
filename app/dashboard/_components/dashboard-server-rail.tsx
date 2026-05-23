@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { UserRound } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { DashboardGuild } from "@/lib/dashboard-data";
+import type { DashboardGuild } from "@/app/dashboard/_data/dashboard-data";
 
 type DashboardServerRailProps = {
   guilds: DashboardGuild[];

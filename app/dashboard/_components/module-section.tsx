@@ -1,8 +1,8 @@
-import { ModuleCard } from "@/components/dashboard/module-card";
+import { ModuleCard } from "@/app/dashboard/_components/module-card";
 import type {
   DashboardModule,
   DashboardModuleGroup,
-} from "@/lib/dashboard-data";
+} from "@/app/dashboard/_data/dashboard-data";
 
 type ModuleSectionProps = {
   group: DashboardModuleGroup;

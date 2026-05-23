@@ -1,6 +1,6 @@
 import { ChevronRight } from "lucide-react";
-import { StatusPill } from "@/components/dashboard/status-pill";
-import type { DashboardGuild } from "@/lib/dashboard-data";
+import { StatusPill } from "@/app/dashboard/_components/status-pill";
+import type { DashboardGuild } from "@/app/dashboard/_data/dashboard-data";
 
 type DashboardTopbarProps = {
   activeGuild: DashboardGuild;

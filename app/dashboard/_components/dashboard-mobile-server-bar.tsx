@@ -1,4 +1,4 @@
-import type { DashboardGuild } from "@/lib/dashboard-data";
+import type { DashboardGuild } from "@/app/dashboard/_data/dashboard-data";
 import { cn } from "@/lib/utils";
 
 type DashboardMobileServerBarProps = {

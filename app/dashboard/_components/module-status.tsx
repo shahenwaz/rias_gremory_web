@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import type { DashboardModule } from "@/lib/dashboard-data";
+import type { DashboardModule } from "@/app/dashboard/_data/dashboard-data";
 
 type ModuleStatusProps = {
   status: DashboardModule["status"];

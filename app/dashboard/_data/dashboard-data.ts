@@ -1,5 +1,5 @@
-import mockGuilds from "@/src/data/mock-guilds.json";
-import mockDashboardSettings from "@/src/data/mock-dashboard-settings.json";
+import mockGuilds from "./mock-guilds.json";
+import mockDashboardSettings from "./mock-dashboard-settings.json";
 
 export type DashboardGuild = {
   id: string;

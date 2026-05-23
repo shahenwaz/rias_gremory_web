@@ -7,10 +7,10 @@ import {
   Users,
   type LucideIcon,
 } from "lucide-react";
-import { DashboardToggle } from "@/components/dashboard/dashboard-toggle";
-import { ModuleStatus } from "@/components/dashboard/module-status";
+import { DashboardToggle } from "@/app/dashboard/_components/dashboard-toggle";
+import { ModuleStatus } from "@/app/dashboard/_components/module-status";
 import { cn } from "@/lib/utils";
-import type { DashboardModule } from "@/lib/dashboard-data";
+import type { DashboardModule } from "@/app/dashboard/_data/dashboard-data";
 
 type ModuleCardProps = {
   module: DashboardModule;

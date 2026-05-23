@@ -1,13 +1,13 @@
 import { Bot, Hash, Sparkles, Users } from "lucide-react";
-import { DashboardInfoCard } from "@/components/dashboard/dashboard-info-card";
-import { DashboardStatCard } from "@/components/dashboard/dashboard-stat-card";
-import { ModuleSection } from "@/components/dashboard/module-section";
+import { DashboardInfoCard } from "@/app/dashboard/_components/dashboard-info-card";
+import { DashboardStatCard } from "@/app/dashboard/_components/dashboard-stat-card";
+import { ModuleSection } from "@/app/dashboard/_components/module-section";
 import type {
   DashboardGuild,
   DashboardModule,
   DashboardModuleGroup,
   DashboardSettings,
-} from "@/lib/dashboard-data";
+} from "@/app/dashboard/_data/dashboard-data";
 
 type DashboardOverviewProps = {
   activeGuild: DashboardGuild;
