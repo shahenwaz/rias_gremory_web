@@ -1,14 +1,16 @@
 "use client";
 
-import { DashboardToggle } from "@/app/dashboard/_components/dashboard-toggle";
-import { MockInput } from "@/app/dashboard/_components/mock-input";
-import { MockSaveButton } from "@/app/dashboard/_components/mock-save-button";
-import { MockSelect } from "@/app/dashboard/_components/mock-select";
-import { SettingsCard } from "@/app/dashboard/_components/settings-card";
-import { SettingsPageHeader } from "@/app/dashboard/_components/settings-page-header";
-import { SettingsRow } from "@/app/dashboard/_components/settings-row";
-import { SettingsSection } from "@/app/dashboard/_components/settings-section";
+import * as React from "react";
+import { MockSaveBar } from "@/app/dashboard/_components/mock-save-bar";
+import { ModulePageHeader } from "@/app/dashboard/_components/module-page-header";
+import { ModuleSettingItem } from "@/app/dashboard/_components/module-setting-item";
+import { WelcomeFeatureEditor } from "@/app/dashboard/_components/welcome-feature-editor";
 import { useDashboard } from "@/app/dashboard/_components/dashboard-context";
+import {
+  type WelcomeFeature,
+  type WelcomeFeatureId,
+  welcomeFeatures,
+} from "@/app/dashboard/_data/welcome-module-data";
 import type { DashboardModule } from "@/app/dashboard/_data/dashboard-data";
 
 export default function WelcomeGoodbyePage() {
@@ -18,94 +20,65 @@ export default function WelcomeGoodbyePage() {
     (module: DashboardModule) => module.id === "welcome-goodbye",
   );
 
-  const isEnabled = welcomeModule?.enabled ?? false;
+  const [activeFeatureId, setActiveFeatureId] =
+    React.useState<WelcomeFeatureId | null>(null);
+
+  const [featureState, setFeatureState] = React.useState<
+    Record<WelcomeFeatureId, boolean>
+  >({
+    "welcome-message": true,
+    "welcome-image": false,
+    "goodbye-message": true,
+  });
+
+  const isModuleEnabled = welcomeModule?.enabled ?? false;
+
+  function toggleFeature(featureId: WelcomeFeatureId) {
+    setFeatureState((currentState: Record<WelcomeFeatureId, boolean>) => ({
+      ...currentState,
+      [featureId]: !currentState[featureId],
+    }));
+  }
+
+  function toggleEditor(featureId: WelcomeFeatureId) {
+    setActiveFeatureId((currentFeatureId: WelcomeFeatureId | null) =>
+      currentFeatureId === featureId ? null : featureId,
+    );
+  }
 
   return (
-    <div className="space-y-4">
-      <SettingsPageHeader
+    <div className="space-y-3">
+      <ModulePageHeader
         eyebrow="Utility Module"
         title="Welcome & Goodbye"
-        description="Configure automatic messages for members joining or leaving the server."
-        action={<MockSaveButton />}
+        description="Control how Rias greets new members and handles leave messages for this server."
+        enabled={isModuleEnabled}
+        toggleLabel="Toggle welcome and goodbye module"
+        onToggle={() => toggleModule("welcome-goodbye")}
       />
 
-      <SettingsSection
-        title="Module status"
-        description="Control whether Rias sends join and leave messages."
-      >
-        <SettingsRow
-          title="Enable welcome and goodbye messages"
-          description="When enabled, Rias will send automatic member join and leave messages."
-        >
-          <DashboardToggle
-            checked={isEnabled}
-            label="Toggle welcome and goodbye module"
-            onCheckedChange={() => toggleModule("welcome-goodbye")}
-          />
-        </SettingsRow>
-      </SettingsSection>
+      <div className="space-y-2.5">
+        {welcomeFeatures.map((feature: WelcomeFeature) => {
+          const isActive = activeFeatureId === feature.id;
 
-      <SettingsSection
-        title="Welcome message"
-        description="Set the channel and message shown to new members."
-      >
-        <SettingsRow
-          title="Welcome channel"
-          description="Choose where the welcome message should be sent."
-        >
-          <MockSelect
-            value="#welcome"
-            options={["#welcome", "#general", "#lobby", "#announcements"]}
-          />
-        </SettingsRow>
+          return (
+            <ModuleSettingItem
+              key={feature.id}
+              title={feature.title}
+              description={feature.description}
+              active={isActive}
+              enabled={featureState[feature.id]}
+              toggleLabel={`Toggle ${feature.title}`}
+              onEdit={() => toggleEditor(feature.id)}
+              onToggle={() => toggleFeature(feature.id)}
+            >
+              <WelcomeFeatureEditor feature={feature} />
+            </ModuleSettingItem>
+          );
+        })}
+      </div>
 
-        <SettingsCard>
-          <div className="space-y-3">
-            <div>
-              <p className="text-sm font-medium text-white">Message template</p>
-              <p className="mt-1 text-sm text-white/42">
-                Mock value for now. Later this will save into the bot JSON.
-              </p>
-            </div>
-
-            <MockInput
-              value="Welcome {user} to {server}! Enjoy your stay."
-              placeholder="Welcome message"
-            />
-          </div>
-        </SettingsCard>
-      </SettingsSection>
-
-      <SettingsSection
-        title="Goodbye message"
-        description="Set the channel and message shown when a member leaves."
-      >
-        <SettingsRow
-          title="Goodbye channel"
-          description="Choose where the goodbye message should be sent."
-        >
-          <MockSelect
-            value="#goodbye"
-            options={["#goodbye", "#general", "#logs", "#lobby"]}
-          />
-        </SettingsRow>
-
-        <SettingsCard>
-          <div className="space-y-3">
-            <div>
-              <p className="text-sm font-medium text-white">Message template</p>
-              <p className="mt-1 text-sm text-white/42">
-                Supports placeholders like user and server later.
-              </p>
-            </div>
-
-            <MockInput
-              value="{user} has left {server}."
-              placeholder="Goodbye message"
-            />
-          </div>
-        </SettingsCard>
-      </SettingsSection>
+      {activeFeatureId ? <MockSaveBar /> : null}
     </div>
   );
 }
