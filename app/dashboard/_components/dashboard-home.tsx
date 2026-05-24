@@ -10,7 +10,7 @@ export function DashboardHome() {
 
   return (
     <div className="space-y-5">
-      <section className="rounded-3xl border border-white/10 bg-white/4 p-5 sm:p-6">
+      <section className="rounded-xl border border-white/10 bg-white/4 p-5 sm:p-6">
         <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary/75">
           Dashboard Overview
         </p>

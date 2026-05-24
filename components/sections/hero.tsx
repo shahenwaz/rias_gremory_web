@@ -81,7 +81,7 @@ export function HeroSection() {
               width={1536}
               height={1024}
               priority
-              className="h-auto w-full rounded-3xl object-cover"
+              className="h-auto w-full rounded-xl object-cover"
             />
 
             {/* stat chips, gently overlapping the bottom of the image */}

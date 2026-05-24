@@ -20,7 +20,7 @@ export function DashboardModuleDetail({
 
   if (!selectedModule) {
     return (
-      <div className="rounded-3xl border border-white/10 bg-white/4 p-6">
+      <div className="rounded-xl border border-white/10 bg-white/4 p-6">
         <p className="text-sm font-medium text-white">Module not found</p>
         <p className="mt-2 text-sm text-white/55">
           This module is not available in the mock settings yet.
@@ -33,7 +33,7 @@ export function DashboardModuleDetail({
 
   return (
     <div className="space-y-5">
-      <section className="rounded-3xl border border-white/10 bg-white/4 p-5 sm:p-6">
+      <section className="rounded-xl border border-white/10 bg-white/4 p-5 sm:p-6">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <div className="flex flex-wrap items-center gap-2">
@@ -61,7 +61,7 @@ export function DashboardModuleDetail({
         </div>
       </section>
 
-      <section className="rounded-3xl border border-white/10 bg-[#11141c] p-5 sm:p-6">
+      <section className="rounded-xl border border-white/10 bg-[#11141c] p-5 sm:p-6">
         <h2 className="text-base font-semibold text-white">
           Current configuration
         </h2>

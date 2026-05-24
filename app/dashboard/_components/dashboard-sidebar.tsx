@@ -16,16 +16,16 @@ type DashboardSidebarProps = {
 
 export function DashboardSidebar({ activeGuild }: DashboardSidebarProps) {
   return (
-    <aside className="my-3 ml-3 hidden h-[calc(100vh-1.5rem)] w-72 shrink-0 overflow-hidden rounded-md border border-white/8 bg-[#101218] lg:flex lg:flex-col">
-      <div className="shrink-0 px-3 pt-3 pb-2">
+    <aside className="hidden h-full w-72 shrink-0 overflow-hidden rounded-t-2xl bg-[#101218] lg:flex lg:flex-col">
+      <div className="px-3 pt-3 pb-2 shrink-0">
         <div className="rounded-md border border-white/10 bg-white/5 p-2.5">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary/18 text-xs font-bold text-primary">
+            <div className="flex items-center justify-center w-10 h-10 text-xs font-bold rounded-md shrink-0 bg-primary/18 text-primary">
               {activeGuild.icon}
             </div>
 
             <div className="min-w-0">
-              <p className="truncate text-sm font-semibold leading-5 text-white">
+              <p className="text-sm font-semibold leading-5 text-white truncate">
                 {activeGuild.name}
               </p>
               <p className="text-xs leading-4 text-white/42">
@@ -36,7 +36,7 @@ export function DashboardSidebar({ activeGuild }: DashboardSidebarProps) {
         </div>
       </div>
 
-      <nav className="min-h-0 flex-1 space-y-3 overflow-y-auto px-3 py-2">
+      <nav className="flex-1 min-h-0 px-3 py-2 space-y-3 overflow-y-auto">
         {dashboardNavGroups.map((group: DashboardNavGroup) => (
           <SidebarGroup key={group.title} group={group} />
         ))}

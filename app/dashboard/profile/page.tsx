@@ -13,7 +13,7 @@ export default function DashboardProfilePage() {
           Back to dashboard
         </Link>
 
-        <section className="mt-6 rounded-3xl border border-white/10 bg-white/4 p-6">
+        <section className="mt-6 rounded-xl border border-white/10 bg-white/4 p-6">
           <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/15 text-primary">
             <UserRound className="h-7 w-7" />
           </div>

@@ -38,7 +38,7 @@ export function DashboardOverview({
 
   return (
     <div className="space-y-5">
-      <section className="overflow-hidden rounded-3xl border border-white/10 bg-white/4">
+      <section className="overflow-hidden rounded-xl border border-white/10 bg-white/4">
         <div className="relative p-5 sm:p-6">
           <div className="absolute right-0 top-0 h-44 w-44 rounded-full bg-primary/20 blur-3xl" />
 

@@ -12,44 +12,38 @@ type DashboardFrameProps = {
 };
 
 export function DashboardFrame({ children }: DashboardFrameProps) {
-  const {
-    guilds,
-    activeGuildId,
-    activeGuild,
-    enabledCount,
-    modules,
-    setActiveGuildId,
-  } = useDashboard();
+  const { guilds, activeGuildId, activeGuild, setActiveGuildId } =
+    useDashboard();
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#0b0d13] text-white">
-      <DashboardServerRail
-        guilds={guilds}
-        activeGuildId={activeGuildId}
-        onGuildChange={setActiveGuildId}
-      />
+    <div className="flex h-screen flex-col overflow-hidden bg-[#0b0d13] text-white">
+      <DashboardTopbar />
 
-      <DashboardSidebar activeGuild={activeGuild} />
-
-      <section className="flex min-w-0 flex-1 flex-col overflow-hidden">
-        <DashboardTopbar
-          activeGuild={activeGuild}
-          enabledCount={enabledCount}
-          totalModules={modules.length}
-        />
-
-        <DashboardMobileServerBar
+      <div className="flex min-h-0 flex-1 overflow-hidden bg-[#0b0d13]">
+        <DashboardServerRail
           guilds={guilds}
           activeGuildId={activeGuildId}
           onGuildChange={setActiveGuildId}
         />
 
-        <DashboardMobileNav />
+        <div className="flex min-h-0 flex-1 rounded-l-2xl bg-[#070910]">
+          <DashboardSidebar activeGuild={activeGuild} />
 
-        <main className="min-h-0 flex-1 overflow-y-auto px-4 py-5 sm:px-6 lg:px-8">
-          {children}
-        </main>
-      </section>
+          <section className="flex flex-col flex-1 min-w-0 overflow-hidden">
+            <DashboardMobileServerBar
+              guilds={guilds}
+              activeGuildId={activeGuildId}
+              onGuildChange={setActiveGuildId}
+            />
+
+            <DashboardMobileNav />
+
+            <main className="flex-1 min-h-0 px-4 py-5 overflow-y-auto lg:px-5">
+              {children}
+            </main>
+          </section>
+        </div>
+      </div>
     </div>
   );
 }
