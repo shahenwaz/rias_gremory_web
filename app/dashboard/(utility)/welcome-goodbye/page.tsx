@@ -4,7 +4,7 @@ import * as React from "react";
 import { MockSaveBar } from "@/app/dashboard/_components/mock-save-bar";
 import { ModulePageHeader } from "@/app/dashboard/_components/module-page-header";
 import { ModuleSettingItem } from "@/app/dashboard/_components/module-setting-item";
-import { WelcomeFeatureEditor } from "@/app/dashboard/_components/welcome-feature-editor";
+import { WelcomeFeatureEditor } from "@/app/dashboard/_components/welcome/welcome-feature-editor";
 import { useDashboard } from "@/app/dashboard/_components/dashboard-context";
 import {
   type WelcomeFeature,
