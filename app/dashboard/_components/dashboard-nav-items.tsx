@@ -5,6 +5,7 @@ import {
   Settings2,
   ShieldCheck,
   UserRound,
+  SlidersHorizontal,
   Users,
   type LucideIcon,
 } from "lucide-react";
@@ -77,6 +78,11 @@ export const dashboardNavGroups: DashboardNavGroup[] = [
   {
     title: "System",
     items: [
+      {
+        label: "Server Config",
+        href: "/dashboard/server-config",
+        icon: SlidersHorizontal,
+      },
       {
         label: "Control Panel Logs",
         href: "/dashboard/control-panel-logs",
