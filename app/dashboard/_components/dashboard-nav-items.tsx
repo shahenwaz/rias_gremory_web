@@ -7,6 +7,7 @@ import {
   UserRound,
   SlidersHorizontal,
   Users,
+  Music2,
   type LucideIcon,
 } from "lucide-react";
 
@@ -37,6 +38,16 @@ export const dashboardNavGroups: DashboardNavGroup[] = [
         href: "/dashboard/modules",
         icon: Settings2,
         exact: true,
+      },
+    ],
+  },
+  {
+    title: "Music",
+    items: [
+      {
+        label: "Music Settings",
+        href: "/dashboard/music-settings",
+        icon: Music2,
       },
     ],
   },
