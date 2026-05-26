@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { canAccessDashboardGuild } from "@/lib/discord-auth";
 
 type RouteContext = {
   params: Promise<{
@@ -35,6 +36,16 @@ function createServerConfigUrl(apiUrl: string, guildId: string) {
 export async function GET(_request: Request, context: RouteContext) {
   try {
     const { guildId } = await context.params;
+    const hasAccess = await canAccessDashboardGuild(guildId);
+
+    if (!hasAccess) {
+      return NextResponse.json(
+        {
+          error: "You do not have access to this server.",
+        },
+        { status: 403 },
+      );
+    }
     const { apiUrl, apiKey } = getBotApiConfig();
 
     const response = await fetch(createServerConfigUrl(apiUrl, guildId), {
@@ -67,6 +78,17 @@ export async function GET(_request: Request, context: RouteContext) {
 export async function PATCH(request: Request, context: RouteContext) {
   try {
     const { guildId } = await context.params;
+    const hasAccess = await canAccessDashboardGuild(guildId);
+
+    if (!hasAccess) {
+      return NextResponse.json(
+        {
+          error: "You do not have access to this server.",
+        },
+        { status: 403 },
+      );
+    }
+
     const { apiUrl, apiKey } = getBotApiConfig();
     const payload = (await request.json()) as ServerConfigPayload;
 

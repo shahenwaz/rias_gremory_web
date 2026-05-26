@@ -5,6 +5,7 @@ export type DashboardGuild = {
   id: string;
   name: string;
   icon: string;
+  iconUrl?: string | null;
   memberCount: number;
   role: string;
   botInstalled: boolean;
@@ -43,6 +44,41 @@ export function getDashboardGuilds(): DashboardGuild[] {
   return mockGuilds as DashboardGuild[];
 }
 
-export function getDashboardSettingsList(): DashboardSettings[] {
-  return mockDashboardSettings as DashboardSettings[];
+export function getDashboardSettingsList(
+  guilds: DashboardGuild[] = [],
+): DashboardSettings[] {
+  const settings = mockDashboardSettings as DashboardSettings[];
+
+  if (!guilds.length) {
+    return settings;
+  }
+
+  return guilds.map((guild: DashboardGuild) => {
+    const existingSettings = settings.find(
+      (setting: DashboardSettings) => setting.guildId === guild.id,
+    );
+
+    return existingSettings ?? createDefaultSettings(guild.id, settings[0]);
+  });
+}
+
+function createDefaultSettings(
+  guildId: string,
+  templateSettings: DashboardSettings,
+): DashboardSettings {
+  return {
+    guildId,
+    controlPanelLogs: {
+      enabled: false,
+      channelName: "Not selected",
+      lastAction: "No activity yet",
+      lastUpdated: "Not synced",
+    },
+    modules: templateSettings.modules.map((module: DashboardModule) => ({
+      ...module,
+      enabled: false,
+      channelName: "Not selected",
+      statsLabel: "Ready to configure",
+    })),
+  };
 }

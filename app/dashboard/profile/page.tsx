@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { LogOut } from "lucide-react";
 import { ArrowLeft, UserRound } from "lucide-react";
 
 export default function DashboardProfilePage() {
@@ -27,6 +28,14 @@ export default function DashboardProfilePage() {
             Later we can show avatar, username, linked servers, permissions,
             dashboard activity, and saved preferences here.
           </p>
+
+          <Link
+            href="/api/auth/discord/logout"
+            className="inline-flex h-9 items-center rounded-md border border-white/10 bg-white/5 px-3 text-sm font-semibold text-white/65 transition-colors hover:border-red-400/25 hover:bg-red-400/10 hover:text-red-100"
+          >
+            <LogOut className="mr-1.5 size-3.5" />
+            Logout
+          </Link>
         </section>
       </div>
     </main>
