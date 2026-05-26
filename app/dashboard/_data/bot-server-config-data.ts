@@ -2,13 +2,7 @@ export type BotTextChannel = {
   id: string;
   name: string;
   commandUsable?: boolean;
-  unavailableType?:
-    | "read-only"
-    | "bot-cannot-view"
-    | "bot-cannot-read"
-    | "bot-cannot-reply"
-    | null;
-  unavailableTitle?: string | null;
+  visibility?: "public" | "private";
   unavailableReason?: string | null;
 };
 

@@ -266,10 +266,18 @@ export function ServerConfigPanel() {
                               : "border-white/8 bg-[#0b0d13] hover:border-white/14 hover:bg-white/5",
                           )}
                         >
-                          <div className="flex items-start justify-between gap-3">
-                            <p className="min-w-0 truncate text-sm font-semibold text-white">
-                              #{channel.name}
-                            </p>
+                          <div className="flex items-center justify-between gap-3">
+                            <div className="min-w-0">
+                              <p className="truncate text-sm font-semibold text-white">
+                                #{channel.name}
+                              </p>
+
+                              {channel.visibility === "private" ? (
+                                <p className="mt-1 text-xs font-medium text-white/35">
+                                  Private channel
+                                </p>
+                              ) : null}
+                            </div>
 
                             <span
                               className={cn(
@@ -317,11 +325,7 @@ export function ServerConfigPanel() {
                               #{channel.name}
                             </p>
 
-                            <p className="mt-1 text-xs font-semibold text-amber-100/70">
-                              {channel.unavailableTitle ?? "Unavailable"}
-                            </p>
-
-                            <p className="mt-1 line-clamp-2 text-xs leading-5 text-white/38">
+                            <p className="mt-1 line-clamp-2 text-xs leading-5 text-white/42">
                               {channel.unavailableReason ??
                                 "Commands cannot run here because of Discord permissions."}
                             </p>
