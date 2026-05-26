@@ -1,4 +1,3 @@
-import mockGuilds from "./mock-guilds.json";
 import mockDashboardSettings from "./mock-dashboard-settings.json";
 
 export type DashboardGuild = {
@@ -13,7 +12,6 @@ export type DashboardGuild = {
 };
 
 export type DashboardModuleGroup = "utility" | "moderation" | "others";
-
 export type DashboardModuleStatus = "ready" | "needs-api" | "later";
 
 export type DashboardModule = {
@@ -40,10 +38,6 @@ export type DashboardSettings = {
   modules: DashboardModule[];
 };
 
-export function getDashboardGuilds(): DashboardGuild[] {
-  return mockGuilds as DashboardGuild[];
-}
-
 export function getDashboardSettingsList(
   guilds: DashboardGuild[] = [],
 ): DashboardSettings[] {
@@ -53,12 +47,16 @@ export function getDashboardSettingsList(
     return settings;
   }
 
+  const templateSettings = settings[0];
+
   return guilds.map((guild: DashboardGuild) => {
     const existingSettings = settings.find(
       (setting: DashboardSettings) => setting.guildId === guild.id,
     );
 
-    return existingSettings ?? createDefaultSettings(guild.id, settings[0]);
+    return (
+      existingSettings ?? createDefaultSettings(guild.id, templateSettings)
+    );
   });
 }
 
