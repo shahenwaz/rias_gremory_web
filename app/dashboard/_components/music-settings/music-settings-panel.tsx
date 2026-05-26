@@ -6,15 +6,13 @@ import { DashboardSaveBar } from "@/app/dashboard/_components/dashboard-save-bar
 import { DashboardToggle } from "@/app/dashboard/_components/dashboard-toggle";
 import { useDashboard } from "@/app/dashboard/_components/dashboard-context";
 import {
-  mockBotTextChannels,
-  type BotTextChannel,
-} from "@/app/dashboard/_data/bot-server-config-data";
-import {
   getBotMusicSettings,
   getTextChannelLabel,
   getVoiceChannelLabel,
+  mockBotMusicTextChannels,
   mockBotRoles,
   mockBotVoiceChannels,
+  type BotMusicTextChannel,
   type BotRole,
   type BotVoiceChannel,
 } from "@/app/dashboard/_data/bot-music-settings-data";
@@ -332,7 +330,7 @@ function TextChannelSelect({
       className="h-10 w-full rounded-md border border-white/10 bg-[#0b0d13] px-3 text-sm font-semibold text-white outline-none transition-colors focus:border-primary/35 disabled:cursor-not-allowed"
     >
       <option value="">{emptyLabel}</option>
-      {mockBotTextChannels.map((channel: BotTextChannel) => (
+      {mockBotMusicTextChannels.map((channel: BotMusicTextChannel) => (
         <option key={channel.id} value={channel.id}>
           #{channel.name}
         </option>
