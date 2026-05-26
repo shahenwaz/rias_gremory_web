@@ -1,7 +1,7 @@
 export type BotTextChannel = {
   id: string;
   name: string;
-  description: string;
+  description?: string;
 };
 
 export type BotServerConfig = {
@@ -9,6 +9,7 @@ export type BotServerConfig = {
   prefix: string;
   botChannelId: string | null;
   disabledChannelIds: string[];
+  textChannels: BotTextChannel[];
 };
 
 export const mockBotTextChannels: BotTextChannel[] = [
@@ -39,46 +40,15 @@ export const mockBotTextChannels: BotTextChannel[] = [
   },
 ];
 
-const mockBotServerConfigs: BotServerConfig[] = [
-  {
-    guildId: "guild_nrz_esports",
-    prefix: "!",
-    botChannelId: "channel_bot_commands",
-    disabledChannelIds: ["channel_general", "channel_welcome"],
-  },
-  {
-    guildId: "guild_rias_lab",
-    prefix: "-",
-    botChannelId: "channel_music",
-    disabledChannelIds: ["channel_logs"],
-  },
-  {
-    guildId: "guild_anime_arena",
-    prefix: "?",
-    botChannelId: null,
-    disabledChannelIds: [],
-  },
-];
-
-export function getBotServerConfig(guildId: string): BotServerConfig {
-  return (
-    mockBotServerConfigs.find(
-      (config: BotServerConfig) => config.guildId === guildId,
-    ) ?? {
-      guildId,
-      prefix: "!",
-      botChannelId: null,
-      disabledChannelIds: [],
-    }
-  );
-}
-
-export function getBotTextChannelName(channelId: string | null) {
+export function getBotTextChannelName(
+  channels: BotTextChannel[],
+  channelId: string | null,
+) {
   if (!channelId) {
     return "Not selected";
   }
 
-  const channel = mockBotTextChannels.find(
+  const channel = channels.find(
     (textChannel: BotTextChannel) => textChannel.id === channelId,
   );
 

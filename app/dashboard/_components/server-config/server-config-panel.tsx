@@ -1,52 +1,93 @@
 "use client";
 
 import * as React from "react";
-import { Ban, CheckCircle2, Hash } from "lucide-react";
+import { Ban, Hash, Loader2 } from "lucide-react";
 import { DashboardSaveBar } from "@/app/dashboard/_components/dashboard-save-bar";
 import { useDashboard } from "@/app/dashboard/_components/dashboard-context";
-import {
-  getBotServerConfig,
-  mockBotTextChannels,
-  type BotTextChannel,
+import type {
+  BotServerConfig,
+  BotTextChannel,
 } from "@/app/dashboard/_data/bot-server-config-data";
 import { cn } from "@/lib/utils";
 
 export function ServerConfigPanel() {
   const { activeGuild } = useDashboard();
 
-  const config = React.useMemo(
-    () => getBotServerConfig(activeGuild.id),
-    [activeGuild.id],
-  );
-
-  const [prefix, setPrefix] = React.useState(config.prefix);
-  const [botChannelId, setBotChannelId] = React.useState(
-    config.botChannelId ?? "",
-  );
+  const [config, setConfig] = React.useState<BotServerConfig | null>(null);
+  const [prefix, setPrefix] = React.useState("");
   const [disabledChannelIds, setDisabledChannelIds] = React.useState<string[]>(
-    config.disabledChannelIds,
+    [],
   );
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [isSaving, setIsSaving] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
 
   React.useEffect(() => {
-    setPrefix(config.prefix);
-    setBotChannelId(config.botChannelId ?? "");
-    setDisabledChannelIds(config.disabledChannelIds);
-  }, [config]);
+    let ignoreResponse = false;
 
-  const selectedBotChannelId = botChannelId || null;
+    async function loadServerConfig() {
+      setIsLoading(true);
+      setErrorMessage(null);
 
-  const selectedBotChannel = mockBotTextChannels.find(
-    (channel: BotTextChannel) => channel.id === selectedBotChannelId,
-  );
+      try {
+        const response = await fetch(
+          `/api/dashboard/guilds/${activeGuild.id}/server-config`,
+          {
+            cache: "no-store",
+          },
+        );
 
-  const commandChannelSummary = selectedBotChannel
-    ? `Commands are limited to #${selectedBotChannel.name}.`
-    : "Commands are allowed in every channel.";
+        const data = (await response.json()) as
+          | BotServerConfig
+          | {
+              error?: string;
+            };
 
-  const hasChanges =
-    prefix !== config.prefix ||
-    selectedBotChannelId !== config.botChannelId ||
-    !areStringListsEqual(disabledChannelIds, config.disabledChannelIds);
+        if (!response.ok) {
+          throw new Error(
+            "error" in data && data.error
+              ? data.error
+              : "Unable to load server config.",
+          );
+        }
+
+        if (!ignoreResponse) {
+          applyConfig(data as BotServerConfig);
+        }
+      } catch (error) {
+        if (!ignoreResponse) {
+          setErrorMessage(
+            error instanceof Error
+              ? error.message
+              : "Unable to load server config.",
+          );
+        }
+      } finally {
+        if (!ignoreResponse) {
+          setIsLoading(false);
+        }
+      }
+    }
+
+    loadServerConfig();
+
+    return () => {
+      ignoreResponse = true;
+    };
+  }, [activeGuild.id]);
+
+  const textChannels = config?.textChannels ?? [];
+
+  const hasChanges = config
+    ? prefix !== config.prefix ||
+      !areStringListsEqual(disabledChannelIds, config.disabledChannelIds)
+    : false;
+
+  function applyConfig(nextConfig: BotServerConfig) {
+    setConfig(nextConfig);
+    setPrefix(nextConfig.prefix);
+    setDisabledChannelIds(nextConfig.disabledChannelIds);
+  }
 
   function toggleDisabledChannel(channelId: string) {
     setDisabledChannelIds((currentIds: string[]) =>
@@ -57,9 +98,69 @@ export function ServerConfigPanel() {
   }
 
   function resetChanges() {
+    if (!config) {
+      return;
+    }
+
     setPrefix(config.prefix);
-    setBotChannelId(config.botChannelId ?? "");
     setDisabledChannelIds(config.disabledChannelIds);
+  }
+
+  async function saveChanges() {
+    if (!config) {
+      return;
+    }
+
+    setIsSaving(true);
+    setErrorMessage(null);
+
+    try {
+      const response = await fetch(
+        `/api/dashboard/guilds/${activeGuild.id}/server-config`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            prefix,
+            disabledChannelIds,
+          }),
+        },
+      );
+
+      const data = (await response.json()) as
+        | BotServerConfig
+        | {
+            error?: string;
+          };
+
+      if (!response.ok) {
+        throw new Error(
+          "error" in data && data.error
+            ? data.error
+            : "Unable to save server config.",
+        );
+      }
+
+      applyConfig(data as BotServerConfig);
+    } catch (error) {
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "Unable to save server config.",
+      );
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
+  if (isLoading) {
+    return <ServerConfigLoading />;
+  }
+
+  if (errorMessage && !config) {
+    return <ServerConfigError message={errorMessage} />;
   }
 
   return (
@@ -74,10 +175,16 @@ export function ServerConfigPanel() {
         </h1>
 
         <p className="mt-2 max-w-2xl text-sm leading-6 text-white/50">
-          Manage the command prefix, command channel, and where bot commands are
-          allowed to run.
+          Manage the command prefix and choose where bot commands should be
+          disabled.
         </p>
       </section>
+
+      {errorMessage ? (
+        <div className="rounded-md border border-red-400/20 bg-red-400/8 px-3 py-2 text-sm text-red-100/80">
+          {errorMessage}
+        </div>
+      ) : null}
 
       <section className="space-y-3">
         <ConfigSection
@@ -93,14 +200,14 @@ export function ServerConfigPanel() {
                   setPrefix(event.target.value.slice(0, 5))
                 }
                 className="h-10 w-full rounded-md border border-white/10 bg-[#0b0d13] px-3 text-sm font-semibold text-white outline-none transition-colors placeholder:text-white/30 focus:border-primary/35"
-                placeholder="!"
+                placeholder="."
               />
             </Field>
 
             <Field label="Command preview">
               <div className="flex h-10 items-center rounded-md border border-white/8 bg-[#0b0d13] px-3">
                 <span className="text-sm font-semibold text-white">
-                  {prefix || "!"}play faded
+                  {prefix || "."}play faded
                 </span>
               </div>
             </Field>
@@ -108,95 +215,93 @@ export function ServerConfigPanel() {
         </ConfigSection>
 
         <ConfigSection
-          icon={<CheckCircle2 className="size-4" />}
-          title="Bot command channel"
-          description="Choose a dedicated channel for bot commands, or allow commands everywhere."
-        >
-          <div className="space-y-3">
-            <Field label="Allowed command channel">
-              <select
-                value={botChannelId}
-                onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
-                  setBotChannelId(event.target.value)
-                }
-                className="h-10 w-full rounded-md border border-white/10 bg-[#0b0d13] px-3 text-sm font-semibold text-white outline-none transition-colors focus:border-primary/35"
-              >
-                <option value="">No dedicated channel</option>
-                {mockBotTextChannels.map((channel: BotTextChannel) => (
-                  <option key={channel.id} value={channel.id}>
-                    #{channel.name}
-                  </option>
-                ))}
-              </select>
-            </Field>
-
-            <div className="rounded-md border border-white/8 bg-[#0b0d13] px-3 py-2.5">
-              <p className="text-sm font-medium text-white/62">
-                {commandChannelSummary}
-              </p>
-              <p className="mt-1 text-xs leading-5 text-white/34">
-                Choose “No dedicated channel” when you want commands to work in
-                all available channels.
-              </p>
-            </div>
-          </div>
-        </ConfigSection>
-
-        <ConfigSection
           icon={<Ban className="size-4" />}
-          title="Disabled command channels"
-          description="Block bot commands in channels where users should not run them."
+          title="Channel command access"
+          description="Choose where Rias should accept or ignore bot commands."
         >
-          <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
-            {mockBotTextChannels.map((channel: BotTextChannel) => {
-              const isDisabled = disabledChannelIds.includes(channel.id);
+          {textChannels.length ? (
+            <div className="space-y-3">
+              <div className="rounded-md border border-white/8 bg-[#0b0d13] px-3 py-2.5">
+                <p className="text-sm font-medium text-white/62">
+                  Commands are allowed in all public channels by default.
+                </p>
+              </div>
 
-              return (
-                <button
-                  key={channel.id}
-                  type="button"
-                  onClick={() => toggleDisabledChannel(channel.id)}
-                  className={cn(
-                    "cursor-pointer rounded-md border px-3 py-3 text-left transition-colors",
-                    isDisabled
-                      ? "border-primary/30 bg-primary/12"
-                      : "border-white/8 bg-[#0b0d13] hover:border-white/14 hover:bg-white/5",
-                  )}
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="min-w-0">
-                      <p className="truncate text-sm font-semibold text-white">
-                        #{channel.name}
-                      </p>
-                      <p className="mt-1 line-clamp-2 text-xs leading-5 text-white/38">
-                        {channel.description}
-                      </p>
-                    </div>
+              <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+                {textChannels.map((channel: BotTextChannel) => {
+                  const isDisabled = disabledChannelIds.includes(channel.id);
 
-                    <span
+                  return (
+                    <button
+                      key={channel.id}
+                      type="button"
+                      onClick={() => toggleDisabledChannel(channel.id)}
                       className={cn(
-                        "mt-0.5 shrink-0 rounded-md border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em]",
+                        "cursor-pointer rounded-md border px-3 py-3 text-left transition-colors",
                         isDisabled
-                          ? "border-primary/25 bg-primary/12 text-primary"
-                          : "border-white/8 bg-white/4 text-white/35",
+                          ? "border-primary/30 bg-primary/12"
+                          : "border-white/8 bg-[#0b0d13] hover:border-white/14 hover:bg-white/5",
                       )}
                     >
-                      {isDisabled ? "Disabled" : "Allowed"}
-                    </span>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
+                      <div className="flex items-start justify-between gap-3">
+                        <p className="min-w-0 truncate text-sm font-semibold text-white">
+                          #{channel.name}
+                        </p>
+
+                        <span
+                          className={cn(
+                            "shrink-0 rounded-md border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em]",
+                            isDisabled
+                              ? "border-primary/25 bg-primary/12 text-primary"
+                              : "border-white/8 bg-white/4 text-white/35",
+                          )}
+                        >
+                          {isDisabled ? "Disabled" : "Allowed"}
+                        </span>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ) : (
+            <div className="rounded-md border border-white/8 bg-[#0b0d13] px-3 py-3 text-sm text-white/42">
+              No text channels were returned for this server.
+            </div>
+          )}
         </ConfigSection>
       </section>
 
       <DashboardSaveBar
         hasChanges={hasChanges}
         onReset={resetChanges}
-        saveLabel="Save soon"
-        saveDisabled
+        onSave={saveChanges}
+        saveLabel="Save changes"
+        saveDisabled={!hasChanges || isSaving}
+        isSaving={isSaving}
       />
+    </div>
+  );
+}
+
+function ServerConfigLoading() {
+  return (
+    <div className="flex min-h-90 items-center justify-center rounded-2xl border border-white/8 bg-white/4">
+      <div className="flex items-center gap-3 text-sm font-medium text-white/55">
+        <Loader2 className="size-4 animate-spin text-primary" />
+        Loading server config...
+      </div>
+    </div>
+  );
+}
+
+function ServerConfigError({ message }: { message: string }) {
+  return (
+    <div className="rounded-2xl border border-red-400/20 bg-red-400/8 p-5">
+      <p className="text-sm font-semibold text-red-100">
+        Server config could not be loaded.
+      </p>
+      <p className="mt-2 text-sm leading-6 text-red-100/65">{message}</p>
     </div>
   );
 }

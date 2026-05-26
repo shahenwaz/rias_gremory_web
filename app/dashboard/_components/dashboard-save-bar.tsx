@@ -7,16 +7,20 @@ import { cn } from "@/lib/utils";
 type DashboardSaveBarProps = {
   hasChanges: boolean;
   onReset: () => void;
+  onSave?: () => void;
   saveLabel?: string;
   saveDisabled?: boolean;
+  isSaving?: boolean;
   className?: string;
 };
 
 export function DashboardSaveBar({
   hasChanges,
   onReset,
+  onSave,
   saveLabel = "Save changes",
   saveDisabled = true,
+  isSaving = false,
   className,
 }: DashboardSaveBarProps) {
   return (
@@ -34,7 +38,7 @@ export function DashboardSaveBar({
         <Button
           type="button"
           variant="ghost"
-          disabled={!hasChanges}
+          disabled={!hasChanges || isSaving}
           onClick={onReset}
           className="h-9 rounded-md px-3 text-white/55 hover:bg-white/7 hover:text-white"
         >
@@ -44,11 +48,12 @@ export function DashboardSaveBar({
 
         <Button
           type="button"
-          disabled={saveDisabled}
-          className="h-9 rounded-md bg-primary/80 px-4 text-primary-foreground opacity-80"
+          disabled={saveDisabled || isSaving}
+          onClick={onSave}
+          className="h-9 rounded-md bg-primary/80 px-4 text-primary-foreground opacity-90"
         >
           <Save className="mr-1.5 size-3.5" />
-          {saveLabel}
+          {isSaving ? "Saving..." : saveLabel}
         </Button>
       </div>
     </div>

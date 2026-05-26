@@ -1,6 +1,15 @@
 [
   {
-    "id": "guild_nrz_esports",
+    "id": "1198237358441640076",
+    "name": "BOT TUTORIAL",
+    "icon": "BT",
+    "memberCount": 4820,
+    "role": "Owner",
+    "botInstalled": true,
+    "permissions": ["ADMINISTRATOR", "MANAGE_GUILD"]
+  },
+  {
+    "id": "1198237358441640077",
     "name": "NRZ Esports",
     "icon": "NR",
     "memberCount": 4820,
@@ -9,7 +18,7 @@
     "permissions": ["ADMINISTRATOR", "MANAGE_GUILD"]
   },
   {
-    "id": "guild_rias_lab",
+    "id": "1198237358441640078",
     "name": "Rias Lab",
     "icon": "RL",
     "memberCount": 1240,
@@ -18,7 +27,7 @@
     "permissions": ["ADMINISTRATOR", "MANAGE_GUILD"]
   },
   {
-    "id": "guild_anime_arena",
+    "id": "1198237358441640079",
     "name": "Anime Arena",
     "icon": "AA",
     "memberCount": 891,
