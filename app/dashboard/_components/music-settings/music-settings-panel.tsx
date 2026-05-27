@@ -1,393 +1,258 @@
 "use client";
 
-import * as React from "react";
 import { Disc3, Headphones, Radio } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { DashboardSaveBar } from "@/app/dashboard/_components/dashboard-save-bar";
-import { DashboardToggle } from "@/app/dashboard/_components/dashboard-toggle";
+import { DashboardSkeleton } from "@/app/dashboard/_components/dashboard-skeleton";
 import { useDashboard } from "@/app/dashboard/_components/dashboard-context";
+import { DjRoleSelector } from "@/app/dashboard/_components/music-settings/dj-role-selector";
+import { MusicConfigSection } from "@/app/dashboard/_components/music-settings/music-config-section";
+import { MusicField } from "@/app/dashboard/_components/music-settings/music-field";
+import { MusicStatusHint } from "@/app/dashboard/_components/music-settings/music-status-hint";
 import {
-  getBotMusicSettings,
+  TextChannelSelect,
+  VoiceChannelSelect,
+} from "@/app/dashboard/_components/music-settings/music-channel-select";
+import { useMusicSettings } from "@/app/dashboard/_components/music-settings/use-music-settings";
+import {
   getTextChannelLabel,
   getVoiceChannelLabel,
-  mockBotMusicTextChannels,
-  mockBotRoles,
-  mockBotVoiceChannels,
-  type BotMusicTextChannel,
-  type BotRole,
-  type BotVoiceChannel,
 } from "@/app/dashboard/_data/bot-music-settings-data";
-import { cn } from "@/lib/utils";
 
 export function MusicSettingsPanel() {
   const { activeGuild } = useDashboard();
+  const musicSettings = useMusicSettings(activeGuild.id);
 
-  const settings = React.useMemo(
-    () => getBotMusicSettings(activeGuild.id),
-    [activeGuild.id],
-  );
+  const config = musicSettings.config;
+  const form = musicSettings.form;
 
-  const [stayEnabled, setStayEnabled] = React.useState(settings.stayEnabled);
-  const [stayTextChannelId, setStayTextChannelId] = React.useState(
-    settings.stayTextChannelId ?? "",
-  );
-  const [stayVoiceChannelId, setStayVoiceChannelId] = React.useState(
-    settings.stayVoiceChannelId ?? "",
-  );
-  const [djModeEnabled, setDjModeEnabled] = React.useState(
-    settings.djModeEnabled,
-  );
-  const [djRoleIds, setDjRoleIds] = React.useState<string[]>(
-    settings.djRoleIds,
-  );
-  const [setupEnabled, setSetupEnabled] = React.useState(settings.setupEnabled);
-  const [setupTextChannelId, setSetupTextChannelId] = React.useState(
-    settings.setupTextChannelId ?? "",
-  );
-
-  React.useEffect(() => {
-    setStayEnabled(settings.stayEnabled);
-    setStayTextChannelId(settings.stayTextChannelId ?? "");
-    setStayVoiceChannelId(settings.stayVoiceChannelId ?? "");
-    setDjModeEnabled(settings.djModeEnabled);
-    setDjRoleIds(settings.djRoleIds);
-    setSetupEnabled(settings.setupEnabled);
-    setSetupTextChannelId(settings.setupTextChannelId ?? "");
-  }, [settings]);
-
-  const hasChanges =
-    stayEnabled !== settings.stayEnabled ||
-    normalizeId(stayTextChannelId) !== settings.stayTextChannelId ||
-    normalizeId(stayVoiceChannelId) !== settings.stayVoiceChannelId ||
-    djModeEnabled !== settings.djModeEnabled ||
-    setupEnabled !== settings.setupEnabled ||
-    normalizeId(setupTextChannelId) !== settings.setupTextChannelId ||
-    !areStringListsEqual(djRoleIds, settings.djRoleIds);
-
-  function toggleDjRole(roleId: string) {
-    setDjRoleIds((currentIds: string[]) =>
-      currentIds.includes(roleId)
-        ? currentIds.filter((currentId: string) => currentId !== roleId)
-        : [...currentIds, roleId],
-    );
+  if (musicSettings.isLoading) {
+    return <MusicSettingsLoading />;
   }
 
-  function resetChanges() {
-    setStayEnabled(settings.stayEnabled);
-    setStayTextChannelId(settings.stayTextChannelId ?? "");
-    setStayVoiceChannelId(settings.stayVoiceChannelId ?? "");
-    setDjModeEnabled(settings.djModeEnabled);
-    setDjRoleIds(settings.djRoleIds);
-    setSetupEnabled(settings.setupEnabled);
-    setSetupTextChannelId(settings.setupTextChannelId ?? "");
+  if (musicSettings.errorMessage && !config) {
+    return <MusicSettingsError message={musicSettings.errorMessage} />;
   }
+
+  const textChannels = config?.textChannels ?? [];
+  const voiceChannels = config?.voiceChannels ?? [];
+  const roles = config?.roles ?? [];
 
   return (
     <div className="space-y-4">
       <section className="rounded-2xl border border-white/8 bg-linear-to-br from-white/7 via-white/4 to-primary/5 px-4 py-4 sm:px-5">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-primary/75">
-          Music Controls
-        </p>
-
-        <h1 className="mt-1.5 text-xl font-semibold tracking-tight text-white sm:text-2xl">
-          Music Settings
+        <h1 className="text-xl font-semibold tracking-tight text-white sm:text-2xl">
+          Music settings for{" "}
+          <span className="text-primary">{activeGuild.name}</span>
         </h1>
 
         <p className="mt-2 max-w-2xl text-sm leading-6 text-white/50">
-          Configure 24/7 playback, DJ mode, music roles, and the music setup
-          panel for this server.
+          Configure 24/7 playback, DJ permissions, and the music control panel.
         </p>
       </section>
+
+      {musicSettings.errorMessage ? (
+        <div className="rounded-md border border-red-400/20 bg-red-400/8 px-3 py-2 text-sm text-red-100/80">
+          {musicSettings.errorMessage}
+        </div>
+      ) : null}
 
       <section className="space-y-3">
         <MusicConfigSection
           icon={<Radio className="size-4" />}
           title="24/7 music mode"
-          description="Keep the bot connected to a voice channel and ready for music playback."
-          enabled={stayEnabled}
+          description="Keep Rias connected to a voice channel and ready for playback."
+          enabled={form.stayEnabled}
           toggleLabel="Toggle 24/7 music mode"
           onToggle={() =>
-            setStayEnabled((currentValue: boolean) => !currentValue)
+            musicSettings.updateForm({
+              stayEnabled: !form.stayEnabled,
+            })
           }
         >
           <div
             className={cn(
               "grid gap-3 lg:grid-cols-2",
-              !stayEnabled && "opacity-55",
+              !form.stayEnabled && "opacity-55",
             )}
           >
-            <Field label="Text channel">
+            <MusicField label="Text channel">
               <TextChannelSelect
-                value={stayTextChannelId}
-                disabled={!stayEnabled}
+                value={form.stayTextChannelId}
+                disabled={!form.stayEnabled}
                 emptyLabel="Select text channel"
-                onChange={setStayTextChannelId}
+                channels={textChannels}
+                onChange={(value: string | null) =>
+                  musicSettings.updateForm({
+                    stayTextChannelId: value,
+                  })
+                }
               />
-            </Field>
+            </MusicField>
 
-            <Field label="Voice channel">
+            <MusicField label="Voice channel">
               <VoiceChannelSelect
-                value={stayVoiceChannelId}
-                disabled={!stayEnabled}
-                onChange={setStayVoiceChannelId}
+                value={form.stayVoiceChannelId}
+                disabled={!form.stayEnabled}
+                channels={voiceChannels}
+                onChange={(value: string | null) =>
+                  musicSettings.updateForm({
+                    stayVoiceChannelId: value,
+                  })
+                }
               />
-            </Field>
+            </MusicField>
           </div>
 
-          <StatusHint>
-            {stayEnabled
+          <MusicStatusHint>
+            {form.stayEnabled
               ? `Using ${getTextChannelLabel(
-                  normalizeId(stayTextChannelId),
-                )} and ${getVoiceChannelLabel(normalizeId(stayVoiceChannelId))}.`
+                  form.stayTextChannelId,
+                  textChannels,
+                )} and ${getVoiceChannelLabel(
+                  form.stayVoiceChannelId,
+                  voiceChannels,
+                )}.`
               : "24/7 mode is currently disabled."}
-          </StatusHint>
+          </MusicStatusHint>
         </MusicConfigSection>
 
         <MusicConfigSection
           icon={<Headphones className="size-4" />}
           title="DJ mode"
-          description="Limit advanced music controls to selected roles."
-          enabled={djModeEnabled}
+          description="Limit advanced music controls to selected server roles."
+          enabled={form.djModeEnabled}
           toggleLabel="Toggle DJ mode"
           onToggle={() =>
-            setDjModeEnabled((currentValue: boolean) => !currentValue)
+            musicSettings.updateForm({
+              djModeEnabled: !form.djModeEnabled,
+            })
           }
         >
-          <div className={cn("space-y-3", !djModeEnabled && "opacity-55")}>
-            <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
-              {mockBotRoles.map((role: BotRole) => {
-                const isSelected = djRoleIds.includes(role.id);
+          <div
+            className={cn("space-y-2.5", !form.djModeEnabled && "opacity-55")}
+          >
+            <DjRoleSelector
+              roles={roles}
+              selectedRoleIds={form.djRoleIds}
+              disabled={!form.djModeEnabled}
+              onToggleRole={musicSettings.toggleDjRole}
+            />
 
-                return (
-                  <button
-                    key={role.id}
-                    type="button"
-                    disabled={!djModeEnabled}
-                    onClick={() => toggleDjRole(role.id)}
-                    className={cn(
-                      "cursor-pointer rounded-md border px-3 py-3 text-left transition-colors disabled:cursor-not-allowed",
-                      isSelected
-                        ? "border-primary/30 bg-primary/12"
-                        : "border-white/8 bg-[#0b0d13] hover:border-white/14 hover:bg-white/5",
-                    )}
-                  >
-                    <p className="truncate text-sm font-semibold text-white">
-                      {role.name}
-                    </p>
-                    <p className="mt-1 line-clamp-2 text-xs leading-5 text-white/38">
-                      {role.description}
-                    </p>
-                  </button>
-                );
-              })}
-            </div>
-
-            <StatusHint>
-              {djModeEnabled
-                ? djRoleIds.length
-                  ? `${djRoleIds.length} role${djRoleIds.length > 1 ? "s" : ""} can control DJ actions.`
+            <MusicStatusHint>
+              {form.djModeEnabled
+                ? form.djRoleIds.length
+                  ? `${form.djRoleIds.length} role${
+                      form.djRoleIds.length > 1 ? "s" : ""
+                    } can control DJ actions.`
                   : "DJ mode is enabled, but no roles are selected yet."
                 : "DJ mode is currently disabled."}
-            </StatusHint>
+            </MusicStatusHint>
           </div>
         </MusicConfigSection>
 
         <MusicConfigSection
           icon={<Disc3 className="size-4" />}
           title="Music setup panel"
-          description="Choose where the bot should keep its music control message."
-          enabled={setupEnabled}
+          description="Choose where Rias should keep the music control message."
+          enabled={form.setupEnabled}
           toggleLabel="Toggle music setup panel"
           onToggle={() =>
-            setSetupEnabled((currentValue: boolean) => !currentValue)
+            musicSettings.updateForm({
+              setupEnabled: !form.setupEnabled,
+            })
           }
         >
           <div
             className={cn(
-              "grid gap-3 lg:grid-cols-[minmax(0,1fr)_260px]",
-              !setupEnabled && "opacity-55",
+              "grid gap-3 lg:grid-cols-[minmax(0,1fr)_240px]",
+              !form.setupEnabled && "opacity-55",
             )}
           >
-            <Field label="Setup channel">
+            <MusicField label="Setup channel">
               <TextChannelSelect
-                value={setupTextChannelId}
-                disabled={!setupEnabled}
+                value={form.setupTextChannelId}
+                disabled={!form.setupEnabled}
                 emptyLabel="Select setup channel"
-                onChange={setSetupTextChannelId}
+                channels={textChannels}
+                onChange={(value: string | null) =>
+                  musicSettings.updateForm({
+                    setupTextChannelId: value,
+                  })
+                }
               />
-            </Field>
+            </MusicField>
 
             <div className="rounded-md border border-white/8 bg-[#0b0d13] px-3 py-2.5">
               <p className="text-xs font-medium uppercase tracking-[0.16em] text-white/30">
                 Setup message
               </p>
               <p className="mt-1 truncate text-sm font-semibold text-white/72">
-                {settings.setupMessageId ?? "Not created yet"}
+                {config?.setupMessageId ?? "Not created yet"}
               </p>
             </div>
           </div>
 
-          <StatusHint>
-            {setupEnabled
+          <MusicStatusHint>
+            {form.setupEnabled
               ? `Setup panel will use ${getTextChannelLabel(
-                  normalizeId(setupTextChannelId),
+                  form.setupTextChannelId,
+                  textChannels,
                 )}.`
               : "Music setup panel is currently disabled."}
-          </StatusHint>
+          </MusicStatusHint>
         </MusicConfigSection>
       </section>
 
       <DashboardSaveBar
-        hasChanges={hasChanges}
-        onReset={resetChanges}
-        saveLabel="Save soon"
-        saveDisabled
+        hasChanges={musicSettings.hasChanges}
+        onReset={musicSettings.resetChanges}
+        onSave={musicSettings.saveChanges}
+        saveLabel="Save changes"
+        saveDisabled={!musicSettings.hasChanges || musicSettings.isSaving}
+        isSaving={musicSettings.isSaving}
       />
     </div>
   );
 }
 
-function MusicConfigSection({
-  icon,
-  title,
-  description,
-  enabled,
-  toggleLabel,
-  children,
-  onToggle,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-  enabled: boolean;
-  toggleLabel: string;
-  children: React.ReactNode;
-  onToggle: () => void;
-}) {
+function MusicSettingsLoading() {
   return (
-    <article className="rounded-2xl border border-white/8 bg-white/4 p-4 transition-colors hover:border-white/12 sm:p-5">
-      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div className="flex min-w-0 gap-3">
-          <div className="flex size-9 shrink-0 items-center justify-center rounded-md border border-primary/18 bg-primary/10 text-primary">
-            {icon}
-          </div>
+    <div className="space-y-3">
+      <section className="rounded-2xl border border-white/8 bg-linear-to-br from-white/7 via-white/4 to-primary/5 px-4 py-4 sm:px-5">
+        <DashboardSkeleton className="h-7 w-64" />
+        <DashboardSkeleton className="mt-3 h-4 w-full max-w-120" />
+      </section>
 
-          <div className="min-w-0">
-            <h2 className="text-sm font-semibold text-white">{title}</h2>
-            <p className="mt-1 max-w-2xl text-sm leading-5 text-white/44">
-              {description}
-            </p>
-          </div>
-        </div>
+      <section className="space-y-2.5">
+        {Array.from({ length: 3 }).map((_, index: number) => (
+          <article
+            key={index}
+            className="rounded-2xl border border-white/8 bg-white/4 p-3.5 sm:p-4"
+          >
+            <div className="flex gap-3">
+              <DashboardSkeleton className="size-9 bg-primary/12" />
+              <div className="flex-1">
+                <DashboardSkeleton className="h-4 w-40" />
+                <DashboardSkeleton className="mt-2 h-3 w-full max-w-96" />
+              </div>
+            </div>
 
-        <DashboardToggle
-          checked={enabled}
-          label={toggleLabel}
-          onCheckedChange={onToggle}
-        />
-      </div>
-
-      {children}
-    </article>
-  );
-}
-
-function Field({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div>
-      <label className="text-xs font-medium uppercase tracking-[0.18em] text-white/35">
-        {label}
-      </label>
-
-      <div className="mt-2">{children}</div>
+            <DashboardSkeleton className="mt-4 h-10 w-full" />
+          </article>
+        ))}
+      </section>
     </div>
   );
 }
 
-function TextChannelSelect({
-  value,
-  disabled,
-  emptyLabel,
-  onChange,
-}: {
-  value: string;
-  disabled: boolean;
-  emptyLabel: string;
-  onChange: (value: string) => void;
-}) {
+function MusicSettingsError({ message }: { message: string }) {
   return (
-    <select
-      value={value}
-      disabled={disabled}
-      onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
-        onChange(event.target.value)
-      }
-      className="h-10 w-full rounded-md border border-white/10 bg-[#0b0d13] px-3 text-sm font-semibold text-white outline-none transition-colors focus:border-primary/35 disabled:cursor-not-allowed"
-    >
-      <option value="">{emptyLabel}</option>
-      {mockBotMusicTextChannels.map((channel: BotMusicTextChannel) => (
-        <option key={channel.id} value={channel.id}>
-          #{channel.name}
-        </option>
-      ))}
-    </select>
-  );
-}
-
-function VoiceChannelSelect({
-  value,
-  disabled,
-  onChange,
-}: {
-  value: string;
-  disabled: boolean;
-  onChange: (value: string) => void;
-}) {
-  return (
-    <select
-      value={value}
-      disabled={disabled}
-      onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
-        onChange(event.target.value)
-      }
-      className="h-10 w-full rounded-md border border-white/10 bg-[#0b0d13] px-3 text-sm font-semibold text-white outline-none transition-colors focus:border-primary/35 disabled:cursor-not-allowed"
-    >
-      <option value="">Select voice channel</option>
-      {mockBotVoiceChannels.map((channel: BotVoiceChannel) => (
-        <option key={channel.id} value={channel.id}>
-          {channel.name} · {channel.listenerCount} listening
-        </option>
-      ))}
-    </select>
-  );
-}
-
-function StatusHint({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="mt-3 rounded-md border border-white/8 bg-[#0b0d13] px-3 py-2 text-sm leading-5 text-white/42">
-      {children}
+    <div className="rounded-2xl border border-red-400/20 bg-red-400/8 p-5">
+      <p className="text-sm font-semibold text-red-100">
+        Music settings could not be loaded.
+      </p>
+      <p className="mt-2 text-sm leading-6 text-red-100/65">{message}</p>
     </div>
-  );
-}
-
-function normalizeId(value: string) {
-  return value || null;
-}
-
-function areStringListsEqual(firstList: string[], secondList: string[]) {
-  if (firstList.length !== secondList.length) {
-    return false;
-  }
-
-  const sortedFirstList = [...firstList].sort();
-  const sortedSecondList = [...secondList].sort();
-
-  return sortedFirstList.every(
-    (item: string, index: number) => item === sortedSecondList[index],
   );
 }
