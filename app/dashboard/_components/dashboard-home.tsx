@@ -1,69 +1,76 @@
 "use client";
 
-import { Bot, Hash, Users } from "lucide-react";
-import { DashboardInfoCard } from "@/app/dashboard/_components/dashboard-info-card";
-import { DashboardStatCard } from "@/app/dashboard/_components/dashboard-stat-card";
+import { Command, Hash, ListChecks, Users } from "lucide-react";
+import { ActiveModulesSection } from "@/app/dashboard/_components/overview/active-modules-section";
+import { DashboardControlHero } from "@/app/dashboard/_components/overview/dashboard-control-hero";
+import { OverviewMetricCard } from "@/app/dashboard/_components/overview/overview-metric-card";
+import { QuickActionsPanel } from "@/app/dashboard/_components/overview/quick-actions-panel";
+import { useServerConfigSummary } from "@/app/dashboard/_components/overview/use-server-config-summary";
 import { useDashboard } from "@/app/dashboard/_components/dashboard-context";
+import type { DashboardModule } from "@/app/dashboard/_data/dashboard-data";
 
 export function DashboardHome() {
   const { activeGuild, activeSettings, modules, enabledCount } = useDashboard();
+  const serverConfig = useServerConfigSummary(activeGuild.id);
+
+  const readyModules = modules.filter(
+    (module: DashboardModule) => module.status === "ready",
+  );
+
+  const needsApiModules = modules.filter(
+    (module: DashboardModule) => module.status === "needs-api",
+  );
+
+  const enabledModules = modules.filter(
+    (module: DashboardModule) => module.enabled,
+  );
 
   return (
-    <div className="space-y-5">
-      <section className="rounded-xl border border-white/10 bg-white/4 p-5 sm:p-6">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary/75">
-          Dashboard Overview
-        </p>
+    <div className="space-y-4">
+      <DashboardControlHero
+        guildName={activeGuild.name}
+        configStatus={serverConfig.status}
+        prefixLabel={serverConfig.prefixLabel}
+        channelAccessLabel={serverConfig.channelAccessLabel}
+        errorMessage={serverConfig.errorMessage}
+      />
 
-        <h1 className="mt-2 max-w-2xl text-2xl font-semibold tracking-tight sm:text-3xl">
-          Manage {activeGuild.name} from one clean control panel.
-        </h1>
-
-        <p className="mt-3 max-w-2xl text-sm leading-6 text-white/55">
-          A simple overview for the selected server. Module settings and logs
-          are now separated into their own pages.
-        </p>
-      </section>
-
-      <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        <DashboardStatCard
+      <section className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-4">
+        <OverviewMetricCard
+          icon={<Users className="size-4" />}
           label="Members"
           value={activeGuild.memberCount.toLocaleString()}
+          hint="Server size"
         />
-        <DashboardStatCard label="Role" value={activeGuild.role} />
-        <DashboardStatCard
+
+        <OverviewMetricCard
+          icon={<Hash className="size-4" />}
+          label="Prefix"
+          value={serverConfig.prefixLabel}
+          hint="Command trigger"
+          isLoading={serverConfig.status === "loading"}
+        />
+
+        <OverviewMetricCard
+          icon={<Command className="size-4" />}
+          label="Command Channels"
+          value={serverConfig.commandReadyLabel}
+          hint={serverConfig.disabledChannelLabel}
+          isLoading={serverConfig.status === "loading"}
+        />
+
+        <OverviewMetricCard
+          icon={<ListChecks className="size-4" />}
           label="Modules"
           value={`${enabledCount}/${modules.length}`}
-        />
-        <DashboardStatCard
-          label="Logs"
-          value={activeSettings.controlPanelLogs.enabled ? "Active" : "Off"}
+          hint={`${readyModules.length} ready, ${needsApiModules.length} need API`}
         />
       </section>
 
-      <section className="grid gap-4 lg:grid-cols-3">
-        <DashboardInfoCard
-          icon={<Users className="h-4 w-4" />}
-          label="Permission"
-          title="Admin access verified"
-          text="Mocked for now. Later Discord OAuth will check Manage Server or Administrator permission."
-        />
+      <section className="grid gap-3 xl:grid-cols-[minmax(0,1fr)_320px]">
+        <ActiveModulesSection modules={enabledModules} />
 
-        <DashboardInfoCard
-          icon={<Bot className="h-4 w-4" />}
-          label="Bot"
-          title={
-            activeGuild.botInstalled ? "Bot connected" : "Bot not installed"
-          }
-          text="The dashboard saves settings. The bot reads those settings and performs actions in Discord."
-        />
-
-        <DashboardInfoCard
-          icon={<Hash className="h-4 w-4" />}
-          label="Control logs"
-          title={activeSettings.controlPanelLogs.lastAction}
-          text={`Last updated ${activeSettings.controlPanelLogs.lastUpdated} in ${activeSettings.controlPanelLogs.channelName}.`}
-        />
+        <QuickActionsPanel controlPanelLogs={activeSettings.controlPanelLogs} />
       </section>
     </div>
   );
